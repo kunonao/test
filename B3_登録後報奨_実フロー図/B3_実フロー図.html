@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>B3 登録後報奨 実フロー図</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&display=swap">
+<style>
+:root{
+  --ground:#edf0f3; --surface:#ffffff; --paper:#ffffff; --ink:#1d252d; --muted:#56616d; --line:#d3d9df;
+  --accent:#0f766e; --accent-ink:#ffffff; --warn:#c2410c; --err:#b91c1c; --code-bg:#e4e9ee; --shadow:0 1px 2px rgba(20,30,40,.08),0 6px 20px rgba(20,30,40,.06);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#121619; --surface:#1a2026; --paper:#ffffff; --ink:#e3e8ec; --muted:#9ba6b1; --line:#2d363f;
+    --accent:#2dd4bf; --accent-ink:#06201d; --warn:#fb923c; --err:#f87171; --code-bg:#242c35; --shadow:0 1px 2px rgba(0,0,0,.4);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#121619; --surface:#1a2026; --paper:#ffffff; --ink:#e3e8ec; --muted:#9ba6b1; --line:#2d363f;
+  --accent:#2dd4bf; --accent-ink:#06201d; --warn:#fb923c; --err:#f87171; --code-bg:#242c35; --shadow:0 1px 2px rgba(0,0,0,.4);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font-family:"BIZ UDPGothic","Yu Gothic UI","Meiryo","Hiragino Sans","Noto Sans JP",sans-serif;
+  font-size:15px;line-height:1.75;padding-inline:clamp(16px,3vw,40px);padding-block:0 48px}
+.text{max-width:62rem}
+header.top{padding-block:36px 8px}
+.eyebrow{font-size:12.5px;letter-spacing:.08em;color:var(--muted);margin:0 0 6px}
+h1{font-size:clamp(22px,3.2vw,30px);line-height:1.35;margin:0 0 12px;text-wrap:balance}
+h2{font-size:19px;line-height:1.4;margin:0 0 10px;text-wrap:balance}
+p{margin:0 0 12px}
+.lead{font-size:16px}
+.meta{display:grid;grid-template-columns:max-content 1fr;gap:4px 16px;font-size:13.5px;color:var(--muted);margin:14px 0 0}
+.meta dt{font-weight:700}
+.meta dd{margin:0}
+code{font-family:"BIZ UDGothic","Consolas","MS Gothic",monospace;font-size:.88em;background:var(--code-bg);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+nav.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--ground);border-bottom:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;padding-block:10px;margin-block:18px 22px}
+nav.bar .jump{display:flex;flex-wrap:wrap;gap:6px}
+nav.bar a{color:var(--ink);text-decoration:none;font-size:14px;padding:5px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+nav.bar a:hover{border-color:var(--accent)}
+.zoom{display:flex;gap:0;margin-left:auto;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.zoom button{font:inherit;font-size:13.5px;padding:5px 12px;border:0;background:var(--surface);color:var(--ink);cursor:pointer}
+.zoom button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+figure.sheet{margin:0 0 36px}
+figure.sheet figcaption{max-width:62rem;margin:0 0 10px}
+figure.sheet figcaption .no{font-size:12.5px;letter-spacing:.08em;color:var(--muted);display:block}
+figure.sheet figcaption strong{font-size:18px}
+figure.sheet figcaption span.desc{display:block;color:var(--muted);font-size:14px}
+.paper{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow);scroll-margin-top:70px}
+.paper svg{display:block;width:100%;height:auto}
+body.actual .paper svg{width:auto;max-width:none}
+section{margin-block:40px 0}
+ul.read{margin:0;padding-left:1.3em}
+ul.read li{margin-bottom:6px}
+.mark-star{color:var(--accent);font-weight:700}
+.mark-warn{color:var(--warn);font-weight:700}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:13.5px;line-height:1.6}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+thead th{background:var(--code-bg);font-weight:700;white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+td:first-child{font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--muted)}
+ul.files{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+ul.files li{display:grid;grid-template-columns:minmax(0,22rem) 1fr;gap:4px 16px}
+@media (max-width:640px){ul.files li{grid-template-columns:1fr}.zoom{margin-left:0}}
+footer{margin-top:44px;color:var(--muted);font-size:12.5px}
+</style>
+</head>
+<body>
+<header class="top text">
+<p class="eyebrow">報奨金算出プログラム　B3 登録後報奨</p>
+<h1>B3 登録後報奨 実フロー図</h1>
+<p class="lead">仕様書の mermaid 図ではなく、<strong>プログラムが実際にたどる順序・分岐・出口</strong>を、JIS X 0121 の記号で描いたフローチャートです。
+ループは戻り矢印ではなくループ端（始端と終端の対）で表し、要確認・正常不支給・処理全体の停止を出口ごとに描き分けました。</p>
+<dl class="meta">
+<dt>根拠のコード</dt><dd><code>kunonao/houshoukin</code> ブランチ <code>b3-registered-after</code>（<code>3c4b710</code>）＝ 共有用_報奨金算出_20260922 のプログラム</dd>
+<dt>対応する仕様書</dt><dd>B3_登録後報奨フロー.md・B3.0_ファミリー処理.md・B3.2_報奨グループ特定.md・C_共通部品.md（改訂3a）。図の [B3-x-y] はそのブロック番号</dd>
+<dt>作図</dt><dd>2026-09-28</dd>
+</dl>
+</header>
+<nav class="bar" aria-label="図の切り替え">
+<div class="jump"><a href="#sheet1">1/3 全体</a><a href="#sheet2">2/3 グループ付番</a><a href="#sheet3">3/3 グループ処理</a><a href="#diff">仕様書の図との違い</a></div>
+<div class="zoom" role="group" aria-label="図の大きさ"><button type="button" data-mode="fit" aria-pressed="true">幅に合わせる</button><button type="button" data-mode="actual" aria-pressed="false">原寸</button></div>
+</nav>
+<main>
+<figure class="sheet" id="sheet1"><figcaption><span class="no">1/3 全体</span><strong>起動から保存まで</strong><span class="desc">bat を実行してから結果ブックを保存するまで。ファミリーのループの中で 3-0 入力ゲートを通し、グループ付番（2/3）と報奨グループごとの処理（3/3）を呼ぶ。</span></figcaption><div class="paper" tabindex="0" aria-label="1/3 全体 起動から保存まで（横にスクロールできます）"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1840 2242" width="1840" height="2242" font-family="&#x27;BIZ UDPGothic&#x27;,&#x27;Yu Gothic UI&#x27;,&#x27;Yu Gothic&#x27;,&#x27;Meiryo&#x27;,&#x27;Hiragino Sans&#x27;,&#x27;Noto Sans JP&#x27;,&#x27;IPAPGothic&#x27;,&#x27;IPAGothic&#x27;,sans-serif" role="img" aria-label="B3 登録後報奨 — 実フロー図 1/3　全体（起動から保存まで）">
+<defs>
+<marker id="ah-p1" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker>
+</defs>
+<rect x="0" y="0" width="1840" height="2242" fill="#ffffff"/>
+<text x="40" y="46" font-size="22" font-weight="bold" fill="#1f2937">B3 登録後報奨 — 実フロー図 1/3　全体（起動から保存まで）</text>
+<text x="40" y="72" font-size="12.5" fill="#64748b">実行\b3_登録後報奨を算出.bat → main.py b3 → houshoukin/b3/runner.py → registration.py の順に、実際に通る処理を描いた。ファミリー単位のループの中身は 2/3・3/3。</text>
+<rect x="950.2" y="361.0" width="519.7" height="464.0" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="7 5"/>
+<text x="962.2" y="380.0" font-size="12.5" font-weight="bold" fill="#475569">3-0 入力ゲート（ファミリー単位）</text>
+<polyline points="330.0,149.0 330.0,179.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,218.0 330.0,248.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,304.0 330.0,334.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,373.0 330.0,403.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,483.0 330.0,513.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,591.0 330.0,621.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,677.0 330.0,707.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,787.0 330.0,817.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,890.0 330.0,920.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,998.0 330.0,1028.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,1108.0 330.0,1138.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,1211.0 330.0,1241.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,1280.0 330.0,1310.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,1349.0 330.0,1379.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,1435.0 330.0,1465.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,1555.0 330.0,1585.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,1624.0 330.0,1654.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,1734.0 330.0,1764.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="330.0,1803.0 330.0,1833.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="536.2,443.0 760.0,443.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="484.5,552.0 760.0,552.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="569.0,747.0 760.0,747.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="460.0,959.0 760.0,959.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="468.3,1068.0 760.0,1068.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="760.0,443.0 760.0,1127.5" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="468.3,1694.0 623.7,1694.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,148.0 1210.0,178.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,234.0 1210.0,264.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,337.0 1210.0,401.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,481.0 1210.0,511.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,591.0 1210.0,621.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,701.0 1210.0,731.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,811.0 1210.0,841.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,897.0 1210.0,927.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,983.0 1210.0,1013.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,1069.0 1210.0,1099.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,1138.0 1210.0,1168.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,1207.0 1210.0,1237.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,1293.0 1210.0,1323.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,1379.0 1210.0,1409.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,1465.0 1210.0,1495.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1358.5,1535.0 1486.5,1535.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,1575.0 1210.0,1627.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1640.0,1563.0 1640.0,1601.0 1210.0,1601.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1416.2,1667.0 1493.0,1667.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,1707.0 1210.0,1763.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1640.0,1695.0 1640.0,1733.0 1210.0,1733.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,1802.0 1210.0,1832.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1210.0,1871.0 1210.0,1901.0" fill="none" stroke="#334155" stroke-width="1.35" stroke-dasharray="5 4" marker-end="url(#ah-p1)"/>
+<polyline points="1388.8,441.0 1650.0,441.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="1340.0,551.0 1650.0,551.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="1340.0,661.0 1650.0,661.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="1447.8,771.0 1650.0,771.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="1650.0,441.0 1650.0,836.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<polyline points="1650.0,926.0 1650.0,1187.5 1288.5,1187.5" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p1)"/>
+<circle cx="760.0" cy="552.0" r="3" fill="#334155"/>
+<circle cx="760.0" cy="747.0" r="3" fill="#334155"/>
+<circle cx="760.0" cy="959.0" r="3" fill="#334155"/>
+<circle cx="760.0" cy="1068.0" r="3" fill="#334155"/>
+<circle cx="1650.0" cy="551.0" r="3" fill="#334155"/>
+<circle cx="1650.0" cy="661.0" r="3" fill="#334155"/>
+<circle cx="1650.0" cy="771.0" r="3" fill="#334155"/>
+<rect x="295.0" y="110.0" width="70.0" height="39.0" rx="19.5" fill="#f1f5f9" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="134.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">開始</tspan></text>
+<polygon points="169.9,179.0 490.1,179.0 474.1,218.0 185.9,218.0" fill="#ecfeff" stroke="#0e7490" stroke-width="1.4"/><text x="330.0" y="203.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">当年度の評価ランク付与（K000）を済ませる</tspan></text><text x="170.9" y="174.0" font-size="11" fill="#64748b">[B3-0-1]</text><text x="488.1" y="174.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="134.7,248.0 525.3,248.0 509.3,304.0 150.7,304.0" fill="#ecfeff" stroke="#0e7490" stroke-width="1.4"/><text x="330.0" y="272.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">TOPAM「登録後報奨」の CSV を1つだけ</tspan><tspan x="330.0" dy="17">入力\登録後報奨\ に置く（自動取得でも手作業でも可）</tspan></text>
+<polygon points="170.6,334.0 489.4,334.0 473.4,373.0 186.6,373.0" fill="#ecfeff" stroke="#0e7490" stroke-width="1.4"/><text x="330.0" y="358.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">実行\b3_登録後報奨を算出.bat を実行する</tspan></text>
+<polygon points="330.0,403.0 536.2,443.0 330.0,483.0 123.8,443.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="439.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">仮想環境・セットアップ合格の記録・</tspan><tspan x="330.0" dy="17">入力 CSV が揃っているか</tspan></text><text x="530.2" y="417.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="330.0,513.0 484.5,552.0 330.0,591.0 175.5,552.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="556.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">設定.xlsx（今年の設定）が読めるか</tspan></text><text x="478.5" y="527.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="175.4,621.0 484.6,621.0 468.6,677.0 191.4,677.0" fill="#ecfeff" stroke="#0e7490" stroke-width="1.4"/><text x="330.0" y="645.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">画面の「報奨金支払年」を確かめて Enter</tspan><tspan x="330.0" dy="17">（違えば閉じて 設定.xlsx を直す）</tspan></text><text x="482.6" y="616.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="330.0,707.0 569.0,747.0 330.0,787.0 91.0,747.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="743.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">結果ブック・設定.xlsx・入力補正マスタを</tspan><tspan x="330.0" dy="17">Excel で開いていないか</tspan></text><text x="563.0" y="721.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<rect x="161.9" y="817.0" width="336.2" height="73.0" fill="#eff6ff" stroke="#334155" stroke-width="1.4"/><line x1="170.9" y1="817.0" x2="170.9" y2="890.0" stroke="#334155" stroke-width="1.2"/><line x1="489.1" y1="817.0" x2="489.1" y2="890.0" stroke="#334155" stroke-width="1.2"/><text x="330.0" y="841.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">事前点検（main.py の preflight）</tspan><tspan x="330.0" dy="17">入力補正マスタ／年度から決まる設定／入力 CSV</tspan><tspan x="330.0" dy="17">（1つ・読める・必須の見出し）／金額マスタ</tspan></text><text x="496.1" y="812.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="330.0,920.0 460.0,959.0 330.0,998.0 200.0,959.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="963.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">不足は無いか</tspan></text><text x="454.0" y="934.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="330.0,1028.0 468.3,1068.0 330.0,1108.0 191.7,1068.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1064.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">「登録後報奨」シートは</tspan><tspan x="330.0" dy="17">まだ無いか</tspan></text><text x="318.0" y="1023.0" font-size="11" fill="#64748b" text-anchor="end">main.py・runner.py</text><text x="462.3" y="1042.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="212.2,1138.0 447.8,1138.0 465.8,1174.5 447.8,1211.0 212.2,1211.0 194.2,1174.5" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1162.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">年度から決まる設定を読む</tspan><tspan x="330.0" dy="17">制度対象期間＝前年 1/1〜12/31</tspan><tspan x="330.0" dy="17">評価付与日下限＝前年 12/1（既定）</tspan></text>
+<polygon points="184.8,1241.0 491.2,1241.0 475.2,1280.0 168.8,1280.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1265.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">CSV を「Raw_登録後」シートへそのまま転写</tspan></text><text x="489.2" y="1236.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<rect x="142.2" y="1310.0" width="375.5" height="39.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1334.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">取込ログに1行（コード版・金額マスタ版・補正マスタ版）</tspan></text><text x="515.8" y="1305.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<rect x="133.0" y="1379.0" width="394.0" height="56.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1403.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">Raw を1行ずつ読む（2回目に出てくる各国ユーザ番号・</tspan><tspan x="330.0" dy="17">国コード・四法区分コードは関連出願（親）の列として持つ）</tspan></text><text x="525.0" y="1374.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<rect x="145.2" y="1465.0" width="369.7" height="90.0" fill="#eff6ff" stroke="#334155" stroke-width="1.4"/><line x1="154.2" y1="1465.0" x2="154.2" y2="1555.0" stroke="#334155" stroke-width="1.2"/><line x1="505.8" y1="1465.0" x2="505.8" y2="1555.0" stroke="#334155" stroke-width="1.2"/><text x="330.0" y="1489.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">[B0] 入力補正（設定\入力補正マスタ.xlsx）</tspan><tspan x="330.0" dy="17">親の関係コード修正 → 親の追加 →</tspan><tspan x="330.0" dy="17">従業員ID の別名 → 受給者の書き換え</tspan><tspan x="330.0" dy="17">記録＝「前処理ログ_登録後」・Raw の該当セルを着色</tspan></text><text x="512.8" y="1460.0" font-size="13" fill="#c2410c" text-anchor="end" font-weight="bold">⚠</text><text x="496.8" y="1460.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<rect x="150.4" y="1585.0" width="359.2" height="39.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1609.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">金額マスタ（B3：評価ランク → 基準報奨金額）を読む</tspan></text><text x="507.6" y="1580.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="330.0,1654.0 468.3,1694.0 330.0,1734.0 191.7,1694.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1690.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">制度対象期間は同一年の</tspan><tspan x="330.0" dy="17">1/1〜12/31 か</tspan></text><text x="318.0" y="1649.0" font-size="11" fill="#64748b" text-anchor="end">[N-02]</text><text x="462.3" y="1668.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<rect x="217.5" y="1764.0" width="225.0" height="39.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1788.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">全行をファミリー番号順に並べる</tspan></text><text x="218.5" y="1759.0" font-size="11" fill="#64748b">[B3-0-0]</text>
+<circle cx="330.0" cy="1848.0" r="15" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1853.0" font-size="14" fill="#1f2937" text-anchor="middle" font-weight="bold"><tspan x="330.0" dy="0">A</tspan></text>
+<rect x="623.3" y="1127.5" width="273.3" height="73.0" rx="36.5" fill="#f1f5f9" stroke="#334155" stroke-width="1.4"/><text x="760.0" y="1151.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="760.0" dy="0">理由を表示して終了（計算しない）</tspan><tspan x="760.0" dy="17">終了コード 2（bat 自身の点検は 1）</tspan><tspan x="760.0" dy="17">画面の文は 結果\実行ログ\ にも残る</tspan></text>
+<rect x="623.7" y="1674.5" width="272.5" height="39.0" rx="19.5" fill="#fff7ed" stroke="#c2410c" stroke-width="1.4" stroke-dasharray="6 4"/><text x="760.0" y="1698.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="760.0" dy="0">⚠ 停止（異常終了。何も保存しない）</tspan></text>
+<circle cx="1210.0" cy="133.0" r="15" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1210.0" y="138.0" font-size="14" fill="#1f2937" text-anchor="middle" font-weight="bold"><tspan x="1210.0" dy="0">A</tspan></text>
+<polygon points="1109.2,178.0 1310.8,178.0 1324.8,192.0 1324.8,234.0 1095.2,234.0 1095.2,192.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="1210.0" y="202.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">ファミリーのループ</tspan><tspan x="1210.0" dy="17">（ファミリー番号順に1つずつ）</tspan></text>
+<rect x="1039.7" y="264.0" width="340.7" height="73.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1210.0" y="288.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">K000 のランクが無い行を控える（終了時の一覧用。</tspan><tspan x="1210.0" dy="17">ゲートの結果に関係なく全ファミリーぶん）</tspan><tspan x="1210.0" dy="17">処理順（通し番号）を行数ぶん確保する</tspan></text><text x="1378.3" y="259.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="1210.0,401.0 1388.8,441.0 1210.0,481.0 1031.2,441.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="1210.0" y="437.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">全行で必須の7項目が空でなく、</tspan><tspan x="1210.0" dy="17">発明者関連の3列があるか</tspan></text><text x="1198.0" y="396.0" font-size="11" fill="#64748b" text-anchor="end">[B3-0-2]</text>
+<polygon points="1210.0,511.0 1340.0,551.0 1210.0,591.0 1080.0,551.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="1210.0" y="547.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">繰返し項目の要素数が</tspan><tspan x="1210.0" dy="17">系列ごとに一致するか</tspan></text><text x="1198.0" y="506.0" font-size="11" fill="#64748b" text-anchor="end">[B3-0-3]</text>
+<polygon points="1210.0,621.0 1340.0,661.0 1210.0,701.0 1080.0,661.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="1210.0" y="657.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">全行に K000 の</tspan><tspan x="1210.0" dy="17">評価ランクがあるか</tspan></text><text x="1198.0" y="616.0" font-size="11" fill="#64748b" text-anchor="end">[B3-0-4]</text>
+<polygon points="1210.0,731.0 1447.8,771.0 1210.0,811.0 972.2,771.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="1210.0" y="767.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">K000 の判断日が日付・ランクが 01〜18・</tspan><tspan x="1210.0" dy="17">同じ日に別のランクが無いか</tspan></text><text x="1198.0" y="726.0" font-size="11" fill="#64748b" text-anchor="end">[B3-0-4] 続き</text><text x="1441.8" y="745.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<rect x="1042.6" y="841.0" width="334.9" height="56.0" fill="#eff6ff" stroke="#334155" stroke-width="1.4"/><line x1="1051.6" y1="841.0" x2="1051.6" y2="897.0" stroke="#334155" stroke-width="1.2"/><line x1="1368.4" y1="841.0" x2="1368.4" y2="897.0" stroke="#334155" stroke-width="1.2"/><text x="1210.0" y="865.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">3-1・3-2　真のH5 の確定と報奨グループの付番</tspan><tspan x="1210.0" dy="17">（詳細は 2/3）</tspan></text><text x="1043.6" y="836.0" font-size="11" fill="#64748b">[B3-1-1]〜[B3-2-11]</text>
+<polygon points="1087.0,927.0 1333.0,927.0 1347.0,941.0 1347.0,983.0 1073.0,983.0 1073.0,941.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="1210.0" y="951.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">報奨グループのループ</tspan><tspan x="1210.0" dy="17">（ソート順で先に現れるグループから）</tspan></text>
+<rect x="1038.2" y="1013.0" width="343.7" height="56.0" fill="#eff6ff" stroke="#334155" stroke-width="1.4"/><line x1="1047.2" y1="1013.0" x2="1047.2" y2="1069.0" stroke="#334155" stroke-width="1.2"/><line x1="1372.8" y1="1013.0" x2="1372.8" y2="1069.0" stroke="#334155" stroke-width="1.2"/><text x="1210.0" y="1037.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">3-3〜3-8　報奨グループの処理</tspan><tspan x="1210.0" dy="17">①を1行・対応表を全案件ぶん作る（詳細は 3/3）</tspan></text><text x="1039.2" y="1008.0" font-size="11" fill="#64748b">[B3-3-1]〜[B3-8-1]</text>
+<polygon points="1125.0,1099.0 1295.0,1099.0 1295.0,1125.0 1282.0,1138.0 1138.0,1138.0 1125.0,1125.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="1210.0" y="1123.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">報奨グループのループ</tspan></text>
+<polygon points="1131.5,1168.0 1288.5,1168.0 1288.5,1194.0 1275.5,1207.0 1144.5,1207.0 1131.5,1194.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="1210.0" y="1192.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">ファミリーのループ</tspan></text>
+<path d="M1083.5,1237.0 H1336.5 V1285.0 Q1273.2,1299.0 1210.0,1285.0 Q1146.8,1271.0 1083.5,1285.0 Z" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1210.0" y="1257.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">①「登録後報奨」シートを書く</tspan><tspan x="1210.0" dy="17">（要確認の行は判断に要る列を薄赤）</tspan></text><text x="1334.5" y="1232.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<path d="M1086.2,1323.0 H1333.8 V1371.0 Q1271.9,1385.0 1210.0,1371.0 Q1148.1,1357.0 1086.2,1371.0 Z" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1210.0" y="1343.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">「登録後_案件対応表」シートを書く</tspan><tspan x="1210.0" dy="17">（グループ内の全案件を1行ずつ）</tspan></text><text x="1331.8" y="1318.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<path d="M998.0,1437.0 L1018.0,1409.0 H1396.0 Q1430.0,1437.0 1396.0,1465.0 H1018.0 Z" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1213.0" y="1433.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1213.0" dy="0">件数を表示：正常支給／正常不支給／要確認／ファミリー数／</tspan><tspan x="1213.0" dy="17">グループ数／ランク未付与の行／前年評価の疑い</tspan></text><text x="1420.0" y="1404.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="1210.0,1495.0 1358.5,1535.0 1210.0,1575.0 1061.5,1535.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="1210.0" y="1531.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">K000 のランクが無い行が</tspan><tspan x="1210.0" dy="17">あったか</tspan></text><text x="1198.0" y="1490.0" font-size="11" fill="#64748b" text-anchor="end">[B3-0-4]</text>
+<path d="M1486.5,1535.0 L1506.5,1507.0 H1767.5 Q1801.5,1535.0 1767.5,1563.0 H1506.5 Z" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1643.0" y="1531.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1643.0" dy="0">注意：該当行の一覧を表示</tspan><tspan x="1643.0" dy="17">（ファミリー番号・各国ユーザ番号・国）</tspan></text>
+<polygon points="1210.0,1627.0 1416.2,1667.0 1210.0,1707.0 1003.8,1667.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="1210.0" y="1663.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">前年評価の疑い（採用ランクの判断日</tspan><tspan x="1210.0" dy="17">＜評価付与日下限）があったか</tspan></text><text x="1410.2" y="1641.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<path d="M1493.0,1667.0 L1513.0,1639.0 H1761.0 Q1795.0,1667.0 1761.0,1695.0 H1513.0 Z" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1643.0" y="1663.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1643.0" dy="0">注意：件数と先頭20件を表示</tspan><tspan x="1643.0" dy="17">（①「評価付与日警告」列で絞り込む）</tspan></text>
+<rect x="1017.4" y="1763.0" width="385.2" height="39.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1210.0" y="1787.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">安全に保存（バックアップ → 一時ファイル → 置き換え）</tspan></text><text x="1400.6" y="1758.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<rect x="1010.4" y="1832.0" width="399.2" height="39.0" rx="19.5" fill="#ecfdf5" stroke="#047857" stroke-width="1.4"/><text x="1210.0" y="1856.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">終了（正常終了。bat は「処理結果状態列と注意を確認」）</tspan></text>
+<polygon points="991.0,1901.0 1429.0,1901.0 1413.0,1974.0 1007.0,1974.0" fill="#ecfeff" stroke="#0e7490" stroke-width="1.4" stroke-dasharray="6 4"/><text x="1210.0" y="1925.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1210.0" dy="0">後工程 [B6]：①の要確認・注意を人が確認し、TOPAM を直す／</tspan><tspan x="1210.0" dy="17">入力補正マスタに行を足す → 結果シートを消して再実行</tspan><tspan x="1210.0" dy="17">（そのファミリーは 3-0 からやり直しになる）</tspan></text>
+<rect x="1493.7" y="836.0" width="312.6" height="90.0" fill="#fef2f2" stroke="#b91c1c" stroke-width="1.4"/><text x="1650.0" y="860.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1650.0" dy="0">①に要確認の行を1行（ファミリー単位。C2）</tspan><tspan x="1650.0" dy="17">処理順・ファミリー番号・構成案件数・</tspan><tspan x="1650.0" dy="17">エラーコード・エラー詳細・到達ブロック＝3-0</tspan><tspan x="1650.0" dy="17">（支払単位ID は振らない）</tspan></text>
+<rect x="40.0" y="2060.0" width="58.0" height="30.0" rx="15.0" fill="#f1f5f9" stroke="#334155" stroke-width="1.4"/><text x="69.0" y="2079.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="69.0" dy="0"></tspan></text>
+<rect x="243.5" y="2060.0" width="58.0" height="30.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="272.5" y="2079.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="272.5" dy="0"></tspan></text>
+<polygon points="395.5,2060.0 424.5,2075.0 395.5,2090.0 366.5,2075.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="395.5" y="2079.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="395.5" dy="0"></tspan></text>
+<rect x="489.5" y="2060.0" width="58.0" height="30.0" fill="#eff6ff" stroke="#334155" stroke-width="1.4"/><line x1="498.5" y1="2060.0" x2="498.5" y2="2090.0" stroke="#334155" stroke-width="1.2"/><line x1="538.5" y1="2060.0" x2="538.5" y2="2090.0" stroke="#334155" stroke-width="1.2"/><text x="518.5" y="2079.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="518.5" dy="0"></tspan></text>
+<polygon points="795.0,2060.0 833.0,2060.0 843.0,2070.0 843.0,2090.0 785.0,2090.0 785.0,2070.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="814.0" y="2079.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="814.0" dy="0"></tspan></text>
+<polygon points="988.5,2060.0 1046.5,2060.0 1046.5,2080.0 1036.5,2090.0 998.5,2090.0 988.5,2080.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="1017.5" y="2079.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1017.5" dy="0"></tspan></text>
+<polygon points="1164.0,2060.0 1186.0,2060.0 1204.0,2075.0 1186.0,2090.0 1164.0,2090.0 1146.0,2075.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1175.0" y="2079.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1175.0" dy="0"></tspan></text>
+<polygon points="1377.0,2060.0 1419.0,2060.0 1403.0,2090.0 1361.0,2090.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1390.0" y="2079.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1390.0" dy="0"></tspan></text>
+<path d="M1553.0,2060.0 H1611.0 V2082.0 Q1596.5,2096.0 1582.0,2082.0 Q1567.5,2068.0 1553.0,2082.0 Z" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1582.0" y="2075.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1582.0" dy="0"></tspan></text>
+<path d="M40.0,2119.0 L60.0,2104.0 H72.0 Q106.0,2119.0 72.0,2134.0 H60.0 Z" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="72.0" y="2123.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="72.0" dy="0"></tspan></text>
+<polygon points="209.0,2104.0 267.0,2104.0 251.0,2134.0 225.0,2134.0" fill="#ecfeff" stroke="#0e7490" stroke-width="1.4"/><text x="238.0" y="2123.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="238.0" dy="0"></tspan></text>
+<circle cx="393.0" cy="2119.0" r="15" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="393.0" y="2124.0" font-size="14" fill="#1f2937" text-anchor="middle" font-weight="bold"><tspan x="393.0" dy="0">A</tspan></text>
+<rect x="40.0" y="2152.0" width="58.0" height="26.0" fill="#fef2f2" stroke="#b91c1c" stroke-width="1.4"/><text x="69.0" y="2169.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="69.0" dy="0"></tspan></text>
+<rect x="271.0" y="2152.0" width="58.0" height="26.0" fill="#f1f5f9" stroke="#475569" stroke-width="1.4"/><text x="300.0" y="2169.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="300.0" dy="0"></tspan></text>
+<rect x="499.0" y="2152.0" width="58.0" height="26.0" fill="#ecfdf5" stroke="#047857" stroke-width="1.4"/><text x="528.0" y="2169.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="528.0" dy="0"></tspan></text>
+<rect x="698.5" y="2152.0" width="58.0" height="26.0" fill="#fff7ed" stroke="#c2410c" stroke-width="1.4" stroke-dasharray="6 4"/><text x="727.5" y="2169.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="727.5" dy="0"></tspan></text>
+<path d="M534.1,167.0 H524.1 V230.0 H534.1" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<text x="536.1" y="185.8" font-size="12" fill="#334155">
+<tspan x="536.1" dy="0">プログラムはこれを確認しない（運用上の前提）。</tspan>
+<tspan x="536.1" dy="17">仕様書の図の判断記号は実装されていない。</tspan>
+<tspan x="536.1" dy="17">未完了で実行すると E09 が多数出て、終了時の一覧で分かる</tspan>
+</text>
+<line x1="524.1" y1="198.5" x2="490.1" y2="198.5" stroke="#64748b" stroke-width="1.2" stroke-dasharray="4 3"/>
+<text x="337.0" y="496.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="337.0" y="604.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="337.0" y="800.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="337.0" y="1011.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="337.0" y="1121.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="337.0" y="1747.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="544.2" y="437.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="492.5" y="546.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="577.0" y="741.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">開いている</text>
+<text x="468.0" y="953.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">ある</text>
+<text x="476.3" y="1062.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">ある（人の編集を守る）</text>
+<text x="476.3" y="1688.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="1217.0" y="494.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="1217.0" y="604.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="1217.0" y="714.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="1217.0" y="824.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="1366.5" y="1529.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">あった</text>
+<text x="1217.0" y="1588.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">なし</text>
+<text x="1424.2" y="1661.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">あった</text>
+<text x="1217.0" y="1720.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">なし</text>
+<text x="1396.8" y="435.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ（E01）</text>
+<text x="1348.0" y="545.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ（E02）</text>
+<text x="1348.0" y="655.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ（E09）</text>
+<text x="1455.8" y="765.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ（E01）</text>
+<text x="1658.0" y="956.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">次のファミリーへ</text>
+<text x="354.0" y="1853.0" font-size="11.5" fill="#64748b" text-anchor="start" font-weight="normal">2列目の A へ</text>
+<text x="40.0" y="2034.0" font-size="13" fill="#1f2937" text-anchor="start" font-weight="bold">凡例</text>
+<text x="106.0" y="2079.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">端子（開始・終了）</text>
+<text x="309.5" y="2079.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">処理</text>
+<text x="432.5" y="2079.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">判断</text>
+<text x="555.5" y="2079.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">定義済み処理（別ページ・共通部品）</text>
+<text x="851.0" y="2079.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">ループ始端（条件）</text>
+<text x="1054.5" y="2079.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">ループ終端</text>
+<text x="1212.0" y="2079.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">準備（設定・初期化）</text>
+<text x="1427.0" y="2079.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">データ（入出力）</text>
+<text x="1619.0" y="2079.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">書類（Excel シート）</text>
+<text x="106.0" y="2123.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">表示（画面）</text>
+<text x="275.0" y="2123.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">手作業（人）</text>
+<text x="416.0" y="2123.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">結合子（同じ文字へ続く）</text>
+<text x="106.0" y="2169.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">要確認（エラー脱出 C2）</text>
+<text x="337.0" y="2169.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">正常不支給（N01・N03）</text>
+<text x="565.0" y="2169.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">正常支給・正常終了</text>
+<text x="764.5" y="2169.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">⚠ 停止（技術的な不具合）</text>
+<text x="939.2" y="2169.0" font-size="11.5" fill="#0f766e" text-anchor="start" font-weight="normal">★ 仕様書の mermaid 図には描かれていない実際の処理（本文やコードにはある）</text>
+<text x="40.0" y="2199.0" font-size="11.5" fill="#c2410c" text-anchor="start" font-weight="normal">⚠ 技術的な不具合として処理全体を止める（要確認にはならず、結果ブックは保存しない。bat は「異常終了」と表示）</text>
+<text x="40.0" y="2222.0" font-size="11" fill="#64748b" text-anchor="start" font-weight="normal">出典：kunonao/houshoukin ブランチ b3-registered-after（3c4b710）＝ 共有用_報奨金算出_20260922/プログラム/houshoukin/b3/*.py の実際の処理順。[B3-x-y] は仕様書（改訂3a）のブロック番号。作図 2026-09-28。</text>
+</svg></div></figure><figure class="sheet" id="sheet2"><figcaption><span class="no">2/3 グループ付番</span><strong>3-1 真のH5・3-2 報奨グループの付番</strong><span class="desc">ファミリーの行群ごとに1回。親を数える規則と、親が未付番の行を後回しにするパスのループで、各行に報奨グループID を振る。</span></figcaption><div class="paper" tabindex="0" aria-label="2/3 グループ付番 3-1 真のH5・3-2 報奨グループの付番（横にスクロールできます）"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1880 2682" width="1880" height="2682" font-family="&#x27;BIZ UDPGothic&#x27;,&#x27;Yu Gothic UI&#x27;,&#x27;Yu Gothic&#x27;,&#x27;Meiryo&#x27;,&#x27;Hiragino Sans&#x27;,&#x27;Noto Sans JP&#x27;,&#x27;IPAPGothic&#x27;,&#x27;IPAGothic&#x27;,sans-serif" role="img" aria-label="B3 登録後報奨 — 実フロー図 2/3　3-1 真のH5 の確定・3-2 報奨グループの付番（ファミリー単位）">
+<defs>
+<marker id="ah-p2" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker>
+</defs>
+<rect x="0" y="0" width="1880" height="2682" fill="#ffffff"/>
+<text x="40" y="46" font-size="22" font-weight="bold" fill="#1f2937">B3 登録後報奨 — 実フロー図 2/3　3-1 真のH5 の確定・3-2 報奨グループの付番（ファミリー単位）</text>
+<text x="40" y="72" font-size="12.5" fill="#64748b">houshoukin/b3/family.py（sort_family・true_h5_parents・assign_groups）。3-0 ゲートを通ったファミリーの行群ごとに1回。ここで初めて支払単位（報奨グループ）が決まる。</text>
+<rect x="222.4" y="265.0" width="963.3" height="779.0" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="7 5"/>
+<text x="234.4" y="284.0" font-size="12.5" font-weight="bold" fill="#475569">3-1 真のH5 の確定</text>
+<rect x="68.0" y="1052.0" width="1788.0" height="1206.0" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="7 5"/>
+<text x="80.0" y="1071.0" font-size="12.5" font-weight="bold" fill="#475569">3-2 報奨グループの付番（B3.2）</text>
+<polyline points="440.0,157.0 440.0,187.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,243.0 440.0,305.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,344.0 440.0,374.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,430.0 440.0,460.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,499.0 440.0,529.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,609.0 440.0,639.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,719.0 440.0,749.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="570.0,569.0 760.0,569.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="570.0,679.0 760.0,679.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="760.0,569.0 760.0,664.0 844.3,664.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,788.0 440.0,834.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="1000.0,709.0 1000.0,822.0 440.0,822.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,873.0 440.0,903.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,959.0 440.0,989.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,1028.0 440.0,1092.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,1148.0 440.0,1178.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,1234.0 440.0,1264.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,1303.0 440.0,1333.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,1411.0 440.0,1447.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,1525.0 440.0,1561.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,1641.0 440.0,1677.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,1757.0 440.0,1793.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,1871.0 440.0,1907.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="570.0,1372.0 793.9,1372.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="570.0,1486.0 1108.1,1486.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="1300.0,1526.0 1300.0,1556.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="1491.9,1486.0 1563.9,1486.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="570.0,1601.0 641.5,1601.0 641.5,1717.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="601.0,1717.0 675.5,1717.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="1104.5,1717.0 1194.0,1717.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="890.0,1757.0 890.0,1787.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="310.0,1832.0 250.0,1832.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,1946.0 440.0,2004.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="986.1,1372.0 1838.0,1372.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="1756.1,1486.0 1838.0,1486.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="1438.5,1584.0 1838.0,1584.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="1406.0,1717.0 1838.0,1717.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="986.1,1806.5 1838.0,1806.5" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="1838.0,1372.0 1838.0,2023.5 512.0,2023.5" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="170.0,1860.0 170.0,2023.5 368.0,2023.5" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,2043.0 440.0,2073.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="634.9,2113.0 744.9,2113.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,2153.0 440.0,2203.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="950.0,2149.5 950.0,2191.0 440.0,2191.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,2242.0 440.0,2272.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<polyline points="440.0,2328.0 440.0,2358.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p2)"/>
+<circle cx="760.0" cy="679.0" r="3" fill="#334155"/>
+<circle cx="641.5" cy="1717.0" r="3" fill="#334155"/>
+<circle cx="1838.0" cy="1486.0" r="3" fill="#334155"/>
+<circle cx="1838.0" cy="1584.0" r="3" fill="#334155"/>
+<circle cx="1838.0" cy="1717.0" r="3" fill="#334155"/>
+<circle cx="1838.0" cy="1806.5" r="3" fill="#334155"/>
+<rect x="264.3" y="118.0" width="351.3" height="39.0" rx="19.5" fill="#f1f5f9" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="142.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">開始：3-0 を通ったファミリーの行群（1/3 から）</tspan></text>
+<rect x="264.2" y="187.0" width="351.6" height="56.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="211.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">ファミリー内を並べる：JP を先頭、次に国コード順、</tspan><tspan x="440.0" dy="17">同じ国コード内は各国ユーザ番号の昇順</tspan></text><text x="265.2" y="182.0" font-size="11" fill="#64748b">[B3-1-1]</text>
+<polygon points="335.5,305.0 544.5,305.0 557.5,318.0 557.5,344.0 322.5,344.0 322.5,318.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="329.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">行のループ（ファミリーの全行）</tspan></text>
+<rect x="246.4" y="374.0" width="387.2" height="56.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="398.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">関連出願の親の各国ユーザ番号(m)と法的関連性コード(m)を</tspan><tspan x="440.0" dy="17">組に分ける（親が無ければ 0 組）</tspan></text><text x="247.4" y="369.0" font-size="11" fill="#64748b">[B3-1-2]</text>
+<polygon points="387.5,460.0 492.5,460.0 505.5,473.0 505.5,499.0 374.5,499.0 374.5,473.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="484.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">親の組のループ</tspan></text>
+<polygon points="440.0,529.0 570.0,569.0 440.0,609.0 310.0,569.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="565.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">法的関連性コードは</tspan><tspan x="440.0" dy="17">H5（優先権主張）か</tspan></text><text x="564.0" y="543.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="440.0,639.0 570.0,679.0 440.0,719.0 310.0,679.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="675.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">親の各国ユーザ番号に</tspan><tspan x="440.0" dy="17">「JP-P」を含むか</tspan></text><text x="428.0" y="634.0" font-size="11" fill="#64748b" text-anchor="end">[B3-1-3]</text>
+<rect x="355.2" y="749.0" width="169.6" height="39.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="773.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">真のH5 の親として残す</tspan></text><text x="356.2" y="744.0" font-size="11" fill="#64748b">[B3-1-5]</text>
+<rect x="844.3" y="619.0" width="311.3" height="90.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1000.0" y="643.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1000.0" dy="0">真のH5 に数えない</tspan><tspan x="1000.0" dy="17">・H5 以外の関係（04 分割・20・01 など）</tspan><tspan x="1000.0" dy="17">・「JP-P」を含む親の H5 ＝見かけの複合優先</tspan><tspan x="1000.0" dy="17">　（[B3-1-4]「親子」に読み替えて除外）</tspan></text><text x="845.3" y="614.0" font-size="11" fill="#64748b">[B3-1-4] ほか</text><text x="1153.7" y="614.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="374.5,834.0 505.5,834.0 505.5,860.0 492.5,873.0 387.5,873.0 374.5,860.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="858.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">親の組のループ</tspan></text>
+<rect x="251.2" y="903.0" width="377.6" height="56.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="927.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">残った親を並べて「親構成」とする</tspan><tspan x="440.0" dy="17">（0件＝親なし／1件＝単独の親／2件以上＝真の複合優先）</tspan></text><text x="252.2" y="898.0" font-size="11" fill="#64748b">[B3-1-6]・[B3-1-7]</text>
+<polygon points="387.5,989.0 492.5,989.0 492.5,1015.0 479.5,1028.0 400.5,1028.0 387.5,1015.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="1013.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">行のループ</tspan></text>
+<polygon points="288.0,1092.0 592.0,1092.0 610.0,1120.0 592.0,1148.0 288.0,1148.0 270.0,1120.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="1116.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">後回しリスト ← ファミリーの全行（ソート順）</tspan><tspan x="440.0" dy="17">付番済みリスト ← 空</tspan></text><text x="608.0" y="1087.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="343.0,1178.0 537.0,1178.0 551.0,1192.0 551.0,1234.0 329.0,1234.0 329.0,1192.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="1202.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">パスのループ</tspan><tspan x="440.0" dy="17">（後回しの行が残っている間）</tspan></text><text x="549.0" y="1173.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="331.7,1264.0 548.3,1264.0 561.3,1277.0 561.3,1303.0 318.7,1303.0 318.7,1277.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="1288.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">後回しリストの行を上から1行ずつ</tspan></text>
+<polygon points="440.0,1333.0 570.0,1372.0 440.0,1411.0 310.0,1372.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="1376.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">国コードは JP か</tspan></text><text x="428.0" y="1328.0" font-size="11" fill="#64748b" text-anchor="end">[B3-2-1]</text>
+<polygon points="440.0,1447.0 570.0,1486.0 440.0,1525.0 310.0,1486.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="1490.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">真のH5 の親があるか</tspan></text><text x="428.0" y="1442.0" font-size="11" fill="#64748b" text-anchor="end">[B3-2-3]</text>
+<polygon points="440.0,1561.0 570.0,1601.0 440.0,1641.0 310.0,1601.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="1597.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">親は1件だけか</tspan><tspan x="440.0" dy="17">（単独の親）</tspan></text><text x="428.0" y="1556.0" font-size="11" fill="#64748b" text-anchor="end">[B3-2-4]</text>
+<polygon points="440.0,1677.0 601.0,1717.0 440.0,1757.0 279.0,1717.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="1713.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">その親はファミリー内の行か</tspan><tspan x="440.0" dy="17">（JP に限らない）</tspan></text><text x="428.0" y="1672.0" font-size="11" fill="#64748b" text-anchor="end">[B3-2-5]</text>
+<polygon points="440.0,1793.0 570.0,1832.0 440.0,1871.0 310.0,1832.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="1836.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">その親は付番済みか</tspan></text><text x="564.0" y="1807.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<rect x="353.5" y="1907.0" width="173.0" height="39.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="1931.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">親と同じグループを付与</tspan></text><text x="354.5" y="1902.0" font-size="11" fill="#64748b">[B3-2-6]</text>
+<rect x="793.9" y="1352.5" width="192.2" height="39.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="890.0" y="1376.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="890.0" dy="0">新規グループ nJPm を付番</tspan></text><text x="794.9" y="1347.5" font-size="11" fill="#64748b">[B3-2-2]</text>
+<polygon points="1300.0,1446.0 1491.9,1486.0 1300.0,1526.0 1108.1,1486.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="1482.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">この案件だけを真のH5 の親とする</tspan><tspan x="1300.0" dy="17">JP 案件があるか</tspan></text><text x="1288.0" y="1441.0" font-size="11" fill="#64748b" text-anchor="end">[B3-2-9]</text>
+<rect x="1161.5" y="1556.0" width="277.0" height="56.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="1580.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">その JP と同じグループを付与</tspan><tspan x="1300.0" dy="17">（複数なら各国ユーザ番号の昇順で先頭）</tspan></text><text x="1162.5" y="1551.0" font-size="11" fill="#64748b">[B3-2-10]</text>
+<rect x="1563.9" y="1466.5" width="192.2" height="39.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1660.0" y="1490.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1660.0" dy="0">新規グループ nFOm を付番</tspan></text><text x="1564.9" y="1461.5" font-size="11" fill="#64748b">[B3-2-11]</text>
+<polygon points="890.0,1677.0 1104.5,1717.0 890.0,1757.0 675.5,1717.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="890.0" y="1713.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="890.0" dy="0">同じ親構成で付番済みの案件があるか</tspan><tspan x="890.0" dy="17">（JP 案件も対象。最初のものを使う）</tspan></text><text x="878.0" y="1672.0" font-size="11" fill="#64748b" text-anchor="end">[B3-2-7]</text>
+<rect x="1194.0" y="1697.5" width="212.0" height="39.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="1721.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">その案件と同じグループを付与</tspan></text><text x="1195.0" y="1692.5" font-size="11" fill="#64748b">[B3-2-8]</text>
+<rect x="793.9" y="1787.0" width="192.2" height="39.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="890.0" y="1811.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="890.0" dy="0">新規グループ nFOm を付番</tspan></text><text x="794.9" y="1782.0" font-size="11" fill="#64748b">[B3-2-11]</text>
+<rect x="90.0" y="1804.0" width="160.0" height="56.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="170.0" y="1828.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="170.0" dy="0">後回しにする</tspan><tspan x="170.0" dy="17">（次のパスで決める）</tspan></text><text x="248.0" y="1799.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="368.0,2004.0 512.0,2004.0 512.0,2030.0 499.0,2043.0 381.0,2043.0 368.0,2030.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="2028.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">後回しリストの行</tspan></text>
+<polygon points="440.0,2073.0 634.9,2113.0 440.0,2153.0 245.1,2113.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="2109.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">このパスで1行も決まらなかったか</tspan><tspan x="440.0" dy="17">（親どうしの循環・自分が親など）</tspan></text><text x="628.9" y="2087.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<rect x="744.9" y="2076.5" width="410.1" height="73.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="950.0" y="2100.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="950.0" dy="0">後回しの先頭（ソート順で最上位）の1行だけを</tspan><tspan x="950.0" dy="17">後回しせずに決める</tspan><tspan x="950.0" dy="17">（未付番の親は見ずに [B3-2-7] → [B3-2-8]／[B3-2-11]）</tspan></text><text x="1153.1" y="2071.5" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="381.0,2203.0 499.0,2203.0 499.0,2229.0 486.0,2242.0 394.0,2242.0 381.0,2229.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="2227.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">パスのループ</tspan></text>
+<rect x="212.8" y="2272.0" width="454.3" height="56.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="2296.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">並びを 3-1-1 のソート順に戻す</tspan><tspan x="440.0" dy="17">（n＝全ファミリー通しの番号、m＝ファミリー内の JP／FO 別の番号）</tspan></text>
+<rect x="192.1" y="2358.0" width="495.9" height="56.0" rx="28.0" fill="#f1f5f9" stroke="#334155" stroke-width="1.4"/><text x="440.0" y="2382.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="440.0" dy="0">戻る：各行に報奨グループID（{ファミリー番号}-{n}JP{m}／-{n}FO{m}）</tspan><tspan x="440.0" dy="17">→ 1/3 の「報奨グループのループ」へ</tspan></text>
+<rect x="40.0" y="2500.0" width="58.0" height="30.0" rx="15.0" fill="#f1f5f9" stroke="#334155" stroke-width="1.4"/><text x="69.0" y="2519.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="69.0" dy="0"></tspan></text>
+<rect x="243.5" y="2500.0" width="58.0" height="30.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="272.5" y="2519.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="272.5" dy="0"></tspan></text>
+<polygon points="395.5,2500.0 424.5,2515.0 395.5,2530.0 366.5,2515.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="395.5" y="2519.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="395.5" dy="0"></tspan></text>
+<rect x="489.5" y="2500.0" width="58.0" height="30.0" fill="#eff6ff" stroke="#334155" stroke-width="1.4"/><line x1="498.5" y1="2500.0" x2="498.5" y2="2530.0" stroke="#334155" stroke-width="1.2"/><line x1="538.5" y1="2500.0" x2="538.5" y2="2530.0" stroke="#334155" stroke-width="1.2"/><text x="518.5" y="2519.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="518.5" dy="0"></tspan></text>
+<polygon points="795.0,2500.0 833.0,2500.0 843.0,2510.0 843.0,2530.0 785.0,2530.0 785.0,2510.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="814.0" y="2519.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="814.0" dy="0"></tspan></text>
+<polygon points="988.5,2500.0 1046.5,2500.0 1046.5,2520.0 1036.5,2530.0 998.5,2530.0 988.5,2520.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="1017.5" y="2519.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1017.5" dy="0"></tspan></text>
+<polygon points="1164.0,2500.0 1186.0,2500.0 1204.0,2515.0 1186.0,2530.0 1164.0,2530.0 1146.0,2515.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1175.0" y="2519.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1175.0" dy="0"></tspan></text>
+<polygon points="1377.0,2500.0 1419.0,2500.0 1403.0,2530.0 1361.0,2530.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1390.0" y="2519.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1390.0" dy="0"></tspan></text>
+<path d="M1553.0,2500.0 H1611.0 V2522.0 Q1596.5,2536.0 1582.0,2522.0 Q1567.5,2508.0 1553.0,2522.0 Z" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1582.0" y="2515.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1582.0" dy="0"></tspan></text>
+<path d="M40.0,2559.0 L60.0,2544.0 H72.0 Q106.0,2559.0 72.0,2574.0 H60.0 Z" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="72.0" y="2563.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="72.0" dy="0"></tspan></text>
+<polygon points="209.0,2544.0 267.0,2544.0 251.0,2574.0 225.0,2574.0" fill="#ecfeff" stroke="#0e7490" stroke-width="1.4"/><text x="238.0" y="2563.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="238.0" dy="0"></tspan></text>
+<circle cx="393.0" cy="2559.0" r="15" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="393.0" y="2564.0" font-size="14" fill="#1f2937" text-anchor="middle" font-weight="bold"><tspan x="393.0" dy="0">A</tspan></text>
+<rect x="40.0" y="2592.0" width="58.0" height="26.0" fill="#fef2f2" stroke="#b91c1c" stroke-width="1.4"/><text x="69.0" y="2609.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="69.0" dy="0"></tspan></text>
+<rect x="271.0" y="2592.0" width="58.0" height="26.0" fill="#f1f5f9" stroke="#475569" stroke-width="1.4"/><text x="300.0" y="2609.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="300.0" dy="0"></tspan></text>
+<rect x="499.0" y="2592.0" width="58.0" height="26.0" fill="#ecfdf5" stroke="#047857" stroke-width="1.4"/><text x="528.0" y="2609.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="528.0" dy="0"></tspan></text>
+<rect x="698.5" y="2592.0" width="58.0" height="26.0" fill="#fff7ed" stroke="#c2410c" stroke-width="1.4" stroke-dasharray="6 4"/><text x="727.5" y="2609.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="727.5" dy="0"></tspan></text>
+<text x="447.0" y="622.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="447.0" y="732.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="578.0" y="563.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="578.0" y="673.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="447.0" y="1424.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="447.0" y="1538.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="447.0" y="1654.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="447.0" y="1770.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="447.0" y="1884.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="578.0" y="1366.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="578.0" y="1480.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="1307.0" y="1539.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="1499.9" y="1480.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="578.0" y="1595.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="609.0" y="1711.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="1112.5" y="1711.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="897.0" y="1770.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="302.0" y="1826.0" font-size="11.5" fill="#1f2937" text-anchor="end" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="1830.0" y="2016.5" font-size="11.5" fill="#1f2937" text-anchor="end" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">次の行へ</text>
+<text x="642.9" y="2107.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="447.0" y="2166.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="40.0" y="2474.0" font-size="13" fill="#1f2937" text-anchor="start" font-weight="bold">凡例</text>
+<text x="106.0" y="2519.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">端子（開始・終了）</text>
+<text x="309.5" y="2519.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">処理</text>
+<text x="432.5" y="2519.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">判断</text>
+<text x="555.5" y="2519.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">定義済み処理（別ページ・共通部品）</text>
+<text x="851.0" y="2519.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">ループ始端（条件）</text>
+<text x="1054.5" y="2519.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">ループ終端</text>
+<text x="1212.0" y="2519.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">準備（設定・初期化）</text>
+<text x="1427.0" y="2519.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">データ（入出力）</text>
+<text x="1619.0" y="2519.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">書類（Excel シート）</text>
+<text x="106.0" y="2563.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">表示（画面）</text>
+<text x="275.0" y="2563.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">手作業（人）</text>
+<text x="416.0" y="2563.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">結合子（同じ文字へ続く）</text>
+<text x="106.0" y="2609.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">要確認（エラー脱出 C2）</text>
+<text x="337.0" y="2609.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">正常不支給（N01・N03）</text>
+<text x="565.0" y="2609.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">正常支給・正常終了</text>
+<text x="764.5" y="2609.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">⚠ 停止（技術的な不具合）</text>
+<text x="939.2" y="2609.0" font-size="11.5" fill="#0f766e" text-anchor="start" font-weight="normal">★ 仕様書の mermaid 図には描かれていない実際の処理（本文やコードにはある）</text>
+<text x="40.0" y="2639.0" font-size="11.5" fill="#c2410c" text-anchor="start" font-weight="normal">⚠ 技術的な不具合として処理全体を止める（要確認にはならず、結果ブックは保存しない。bat は「異常終了」と表示）</text>
+<text x="40.0" y="2662.0" font-size="11" fill="#64748b" text-anchor="start" font-weight="normal">出典：kunonao/houshoukin ブランチ b3-registered-after（3c4b710）＝ 共有用_報奨金算出_20260922/プログラム/houshoukin/b3/*.py の実際の処理順。[B3-x-y] は仕様書（改訂3a）のブロック番号。作図 2026-09-28。</text>
+</svg></div></figure><figure class="sheet" id="sheet3"><figcaption><span class="no">3/3 グループ処理</span><strong>3-3〜3-8 ①を1行作る</strong><span class="desc">報奨グループごとに1回。採用ランク・対象期間・基準額・受給者・配分を順に決め、要確認はエラー脱出（C2）で①に記録する。</span></figcaption><div class="paper" tabindex="0" aria-label="3/3 グループ処理 3-3〜3-8 ①を1行作る（横にスクロールできます）"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1900 2171" width="1900" height="2171" font-family="&#x27;BIZ UDPGothic&#x27;,&#x27;Yu Gothic UI&#x27;,&#x27;Yu Gothic&#x27;,&#x27;Meiryo&#x27;,&#x27;Hiragino Sans&#x27;,&#x27;Noto Sans JP&#x27;,&#x27;IPAPGothic&#x27;,&#x27;IPAGothic&#x27;,sans-serif" role="img" aria-label="B3 登録後報奨 — 実フロー図 3/3　3-3〜3-8 報奨グループの処理（①を1行作る）">
+<defs>
+<marker id="ah-p3" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker>
+</defs>
+<rect x="0" y="0" width="1900" height="2171" fill="#ffffff"/>
+<text x="40" y="46" font-size="22" font-weight="bold" fill="#1f2937">B3 登録後報奨 — 実フロー図 3/3　3-3〜3-8 報奨グループの処理（①を1行作る）</text>
+<text x="40" y="72" font-size="12.5" fill="#64748b">houshoukin/b3/registration.py の _process_group（identify・rank・period・amount・recipients と共通部品 C0・C1・C3）。報奨グループごとに1回。</text>
+<rect x="82.5" y="173.0" width="494.9" height="374.0" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="7 5"/>
+<text x="94.5" y="192.0" font-size="12.5" font-weight="bold" fill="#475569">3-3 支払単位の特定</text>
+<rect x="98.0" y="559.0" width="800.0" height="699.0" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="7 5"/>
+<text x="110.0" y="578.0" font-size="12.5" font-weight="bold" fill="#475569">3-4 採用評価ランクの決定</text>
+<rect x="123.6" y="1284.0" width="412.8" height="506.0" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="7 5"/>
+<text x="135.6" y="1303.0" font-size="12.5" font-weight="bold" fill="#475569">3-5 対象期間と日割の決定</text>
+<rect x="1089.4" y="164.0" width="680.7" height="304.0" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="7 5"/>
+<text x="1101.4" y="183.0" font-size="12.5" font-weight="bold" fill="#475569">3-6 基準報奨金額と原資（C0）</text>
+<rect x="951.9" y="480.0" width="593.9" height="1015.0" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="7 5"/>
+<text x="963.9" y="499.0" font-size="12.5" font-weight="bold" fill="#475569">3-7 受給者候補の特定（発明者集合の確認 → C1）</text>
+<rect x="1106.6" y="1507.0" width="663.5" height="304.0" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="7 5"/>
+<text x="1118.6" y="1526.0" font-size="12.5" font-weight="bold" fill="#475569">3-8 配分（C3）</text>
+<polyline points="330.0,149.0 330.0,213.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="330.0,303.0 330.0,333.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="330.0,423.0 330.0,453.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="460.0,493.0 755.0,493.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="330.0,533.0 330.0,599.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="330.0,638.0 330.0,668.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="330.0,724.0 330.0,754.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="330.0,834.0 330.0,864.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="524.9,794.0 630.0,794.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="510.6,904.0 630.0,904.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="630.0,794.0 630.0,904.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="630.0,849.0 664.0,849.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="330.0,944.0 330.0,992.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="770.0,877.0 770.0,980.0 330.0,980.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="330.0,1031.0 330.0,1061.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="330.0,1134.0 330.0,1164.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="468.3,1204.0 690.0,1204.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="330.0,1244.0 330.0,1324.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="770.0,1240.5 770.0,1270.0 330.0,1270.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="330.0,1363.0 330.0,1393.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="330.0,1432.0 330.0,1462.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="330.0,1535.0 330.0,1565.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="330.0,1621.0 330.0,1651.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="330.0,1690.0 330.0,1720.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="330.0,1776.0 330.0,1820.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1300.0,140.0 1300.0,204.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1430.0,243.0 1531.9,243.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1640.0,271.0 1640.0,296.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1300.0,282.0 1300.0,312.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1300.0,368.0 1300.0,398.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1300.0,454.0 1300.0,520.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1300.0,600.0 1300.0,630.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1300.0,710.0 1300.0,740.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1300.0,820.0 1300.0,850.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1300.0,889.0 1300.0,919.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1300.0,999.0 1300.0,1029.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1163.9,1069.0 1107.9,1069.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1300.0,1109.0 1300.0,1161.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1040.9,1097.0 1040.9,1133.0 1300.0,1133.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1300.0,1239.0 1300.0,1269.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1300.0,1308.0 1300.0,1356.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1300.0,1395.0 1300.0,1425.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1300.0,1481.0 1300.0,1547.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1430.0,1586.0 1531.9,1586.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1640.0,1614.0 1640.0,1639.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1300.0,1625.0 1300.0,1655.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1300.0,1711.0 1300.0,1741.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1300.0,1797.0 1300.0,1847.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1510.8,1875.0 1455.8,1875.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1430.0,560.0 1862.0,560.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="1508.0,670.0 1862.0,670.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="1458.0,780.0 1862.0,780.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="1430.0,959.0 1862.0,959.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="1430.0,1200.0 1862.0,1200.0" fill="none" stroke="#334155" stroke-width="1.35"/>
+<polyline points="1862.0,560.0 1862.0,1338.0 1828.5,1338.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1690.0,1266.0 1690.0,1293.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<polyline points="1690.0,1383.0 1690.0,1408.0" fill="none" stroke="#334155" stroke-width="1.35" marker-end="url(#ah-p3)"/>
+<circle cx="630.0" cy="849.0" r="3" fill="#334155"/>
+<circle cx="1862.0" cy="670.0" r="3" fill="#334155"/>
+<circle cx="1862.0" cy="780.0" r="3" fill="#334155"/>
+<circle cx="1862.0" cy="959.0" r="3" fill="#334155"/>
+<circle cx="1862.0" cy="1200.0" r="3" fill="#334155"/>
+<rect x="133.1" y="110.0" width="393.7" height="39.0" rx="19.5" fill="#f1f5f9" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="134.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">開始：1つの報奨グループの案件行（ソート順。1/3 から）</tspan></text>
+<rect x="104.5" y="213.0" width="450.9" height="90.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="237.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">①の行を用意する</tspan><tspan x="330.0" dy="17">支払単位ID＝{報奨金支払年}-B3-{グループの連番6桁}</tspan><tspan x="330.0" dy="17">報奨グループID・ファミリー番号・制度対象期間（前年 1/1〜12/31）</tspan><tspan x="330.0" dy="17">処理順＝グループ内の最小・構成案件数</tspan></text><text x="105.5" y="208.0" font-size="11" fill="#64748b">[B3-3-1]</text>
+<rect x="133.6" y="333.0" width="392.7" height="90.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="357.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">対応表の行を全案件ぶん用意する</tspan><tspan x="330.0" dy="17">案件表示番号＝四法名-登録番号（先頭の 0 を除く）</tspan><tspan x="330.0" dy="17">明細表示本文＝要約→作用効果→請求の範囲→意匠の説明の</tspan><tspan x="330.0" dy="17">最初の空でない値（四法区分コードが P・U・D 以外なら⚠）</tspan></text><text x="134.6" y="328.0" font-size="11" fill="#64748b">[B3-3-2]</text><text x="524.4" y="328.0" font-size="13" fill="#c2410c" text-anchor="end" font-weight="bold">⚠</text>
+<polygon points="330.0,453.0 460.0,493.0 330.0,533.0 200.0,493.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="489.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">どれか1案件に</tspan><tspan x="330.0" dy="17">明細表示本文があるか</tspan></text><text x="318.0" y="448.0" font-size="11" fill="#64748b" text-anchor="end">[B3-3-2]</text>
+<circle cx="770.0" cy="493.0" r="15" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="770.0" y="498.0" font-size="14" fill="#1f2937" text-anchor="middle" font-weight="bold"><tspan x="770.0" dy="0">E</tspan></text>
+<polygon points="245.0,599.0 415.0,599.0 428.0,612.0 428.0,638.0 232.0,638.0 232.0,612.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="623.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">案件のループ（ソート順）</tspan></text>
+<rect x="165.5" y="668.0" width="329.0" height="56.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="692.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">案件の評価ランク＝K000 のうち評価判断日が</tspan><tspan x="330.0" dy="17">最新のランク（案件のランク・判断日を対応表へ）</tspan></text><text x="166.5" y="663.0" font-size="11" fill="#64748b">[B3-4-3]</text>
+<polygon points="330.0,754.0 524.9,794.0 330.0,834.0 135.1,794.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="790.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">最初の案件か、または</tspan><tspan x="330.0" dy="17">ランクの数字が採用中より小さいか</tspan></text><text x="318.0" y="749.0" font-size="11" fill="#64748b" text-anchor="end">[B3-4-4]</text>
+<polygon points="330.0,864.0 510.6,904.0 330.0,944.0 149.4,904.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="900.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">同じランクで、この案件が JP・</tspan><tspan x="330.0" dy="17">採用中が外国か</tspan></text><text x="318.0" y="859.0" font-size="11" fill="#64748b" text-anchor="end">[B3-4-4] 続き</text>
+<rect x="664.0" y="821.0" width="212.0" height="56.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="770.0" y="845.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="770.0" dy="0">採用評価ランク・評価採用元・</tspan><tspan x="770.0" dy="17">判断日を更新</tspan></text><text x="665.0" y="816.0" font-size="11" fill="#64748b">[B3-4-5]</text>
+<polygon points="271.0,992.0 389.0,992.0 389.0,1018.0 376.0,1031.0 284.0,1031.0 271.0,1018.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1016.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">案件のループ</tspan></text>
+<rect x="120.0" y="1061.0" width="420.0" height="73.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1085.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">代表案件＝評価採用元。①に採用評価ランク・判断日・</tspan><tspan x="330.0" dy="17">代表案件キー・四法区分コード・案件表示番号・発明の名称・</tspan><tspan x="330.0" dy="17">明細表示本文（代表案件の本文。空ならグループ内で最初の本文）</tspan></text><text x="121.0" y="1056.0" font-size="11" fill="#64748b">[B3-4-7]</text><text x="538.0" y="1056.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="330.0,1164.0 468.3,1204.0 330.0,1244.0 191.7,1204.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1200.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">採用ランクの判断日が</tspan><tspan x="330.0" dy="17">評価付与日下限より前か</tspan></text><text x="462.3" y="1178.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<rect x="690.0" y="1167.5" width="160.0" height="73.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="770.0" y="1191.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="770.0" dy="0">①「評価付与日警告」</tspan><tspan x="770.0" dy="17">＝前年評価の疑い</tspan><tspan x="770.0" dy="17">（要確認にはしない）</tspan></text><text x="848.0" y="1162.5" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="245.0,1324.0 415.0,1324.0 428.0,1337.0 428.0,1363.0 232.0,1363.0 232.0,1337.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1348.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">案件のループ（ソート順）</tspan></text>
+<rect x="172.7" y="1393.0" width="314.7" height="39.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1417.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">始期＝登録日と 1/1 の遅い方（根拠を控える）</tspan></text><text x="173.7" y="1388.0" font-size="11" fill="#64748b">[B3-5-3]</text>
+<rect x="154.2" y="1462.0" width="351.6" height="73.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1486.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">終期候補＝放棄日（最終処分コード 5 の最終処分日）</tspan><tspan x="330.0" dy="17">＞延長後満了日＞権利満了日（どれも無ければ⚠）</tspan><tspan x="330.0" dy="17">終期＝終期候補と 12/31 の早い方（根拠を控える）</tspan></text><text x="155.2" y="1457.0" font-size="11" fill="#64748b">[B3-5-6]</text><text x="503.8" y="1457.0" font-size="13" fill="#c2410c" text-anchor="end" font-weight="bold">⚠</text>
+<rect x="146.0" y="1565.0" width="368.0" height="56.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1589.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">より早い始期／より遅い終期なら、最早始期・最遅終期と</tspan><tspan x="330.0" dy="17">根拠を更新（対応表に案件の始期・終期）</tspan></text><text x="147.0" y="1560.0" font-size="11" fill="#64748b">[B3-5-4]〜[B3-5-8]</text>
+<polygon points="271.0,1651.0 389.0,1651.0 389.0,1677.0 376.0,1690.0 284.0,1690.0 271.0,1677.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1675.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">案件のループ</tspan></text>
+<rect x="145.6" y="1720.0" width="368.8" height="56.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1744.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="330.0" dy="0">対象日数＝最遅終期−最早始期＋1（0 以下なら⚠）</tspan><tspan x="330.0" dy="17">年日数＝365／366、按分率＝「日数/年日数」（表示用）</tspan></text><text x="146.6" y="1715.0" font-size="11" fill="#64748b">[B3-5-10]</text><text x="512.4" y="1715.0" font-size="13" fill="#c2410c" text-anchor="end" font-weight="bold">⚠</text>
+<circle cx="330.0" cy="1835.0" r="15" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="330.0" y="1840.0" font-size="14" fill="#1f2937" text-anchor="middle" font-weight="bold"><tspan x="330.0" dy="0">G</tspan></text>
+<circle cx="1300.0" cy="125.0" r="15" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="130.0" font-size="14" fill="#1f2937" text-anchor="middle" font-weight="bold"><tspan x="1300.0" dy="0">G</tspan></text>
+<polygon points="1300.0,204.0 1430.0,243.0 1300.0,282.0 1170.0,243.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="247.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">採用評価ランクは 13〜18 か</tspan></text><text x="1288.0" y="199.0" font-size="11" fill="#64748b" text-anchor="end">[B3-6-1]</text>
+<rect x="1531.9" y="215.0" width="216.2" height="56.0" fill="#f1f5f9" stroke="#475569" stroke-width="1.4"/><text x="1640.0" y="239.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1640.0" dy="0">正常不支給 N01（到達＝完了）</tspan><tspan x="1640.0" dy="17">基準報奨金額から後の列は空</tspan></text><text x="1532.9" y="210.0" font-size="11" fill="#64748b">[B3-6-3]</text>
+<circle cx="1640.0" cy="311.0" r="15" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1640.0" y="316.0" font-size="14" fill="#1f2937" text-anchor="middle" font-weight="bold"><tspan x="1640.0" dy="0">F</tspan></text>
+<rect x="1111.4" y="312.0" width="377.2" height="56.0" fill="#eff6ff" stroke="#334155" stroke-width="1.4"/><line x1="1120.4" y1="312.0" x2="1120.4" y2="368.0" stroke="#334155" stroke-width="1.2"/><line x1="1479.6" y1="312.0" x2="1479.6" y2="368.0" stroke="#334155" stroke-width="1.2"/><text x="1300.0" y="336.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">C0：金額マスタから基準報奨金額を引く</tspan><tspan x="1300.0" dy="17">（基準日＝制度対象期間の終了日 12/31。無ければ⚠）</tspan></text><text x="1112.4" y="307.0" font-size="11" fill="#64748b">[B3-6-2]</text><text x="1486.6" y="307.0" font-size="13" fill="#c2410c" text-anchor="end" font-weight="bold">⚠</text>
+<rect x="1174.5" y="398.0" width="251.0" height="56.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="422.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">原資の分子＝基準報奨金額×対象日数</tspan><tspan x="1300.0" dy="17">分母＝年日数（ここでは割らない）</tspan></text><text x="1175.5" y="393.0" font-size="11" fill="#64748b">[B3-6-4]</text>
+<polygon points="1300.0,520.0 1430.0,560.0 1300.0,600.0 1170.0,560.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="556.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">同じ発明者が1案件に</tspan><tspan x="1300.0" dy="17">2回登場していないか</tspan></text><text x="1288.0" y="515.0" font-size="11" fill="#64748b" text-anchor="end">[B3-7-1]</text><text x="1424.0" y="534.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="1300.0,630.0 1508.0,670.0 1300.0,710.0 1092.0,670.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="666.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">全案件の発明者集合が同じか</tspan><tspan x="1300.0" dy="17">（従業員ID、無ければ氏名。順不同）</tspan></text><text x="1288.0" y="625.0" font-size="11" fill="#64748b" text-anchor="end">[B3-7-1]</text>
+<polygon points="1300.0,740.0 1458.0,780.0 1300.0,820.0 1142.0,780.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="776.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">同じ氏名に異なる</tspan><tspan x="1300.0" dy="17">従業員ID が付いていないか</tspan></text><text x="1288.0" y="735.0" font-size="11" fill="#64748b" text-anchor="end">[B3-7-1]</text><text x="1452.0" y="754.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="1149.0,850.0 1451.0,850.0 1464.0,863.0 1464.0,889.0 1136.0,889.0 1136.0,863.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="874.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">C1：代表案件の発明者のループ（並び順どおり）</tspan></text>
+<polygon points="1300.0,919.0 1430.0,959.0 1300.0,999.0 1170.0,959.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="955.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">従業員ID があるのに</tspan><tspan x="1300.0" dy="17">所属会社コードが空か</tspan></text><text x="1288.0" y="914.0" font-size="11" fill="#64748b" text-anchor="end">[C1-2a]</text><text x="1424.0" y="933.0" font-size="13" fill="#0f766e" text-anchor="end" font-weight="bold">★</text>
+<polygon points="1300.0,1029.0 1436.1,1069.0 1300.0,1109.0 1163.9,1069.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="1065.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">所属会社コードは</tspan><tspan x="1300.0" dy="17">0000003441（自社）か</tspan></text><text x="1288.0" y="1024.0" font-size="11" fill="#64748b" text-anchor="end">[C1-3]</text>
+<rect x="973.9" y="1041.0" width="134.0" height="56.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1040.9" y="1065.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1040.9" dy="0">支払なし（社外）</tspan><tspan x="1040.9" dy="17">氏名は残す</tspan></text><text x="974.9" y="1036.0" font-size="11" fill="#64748b">[C1-5]</text>
+<polygon points="1300.0,1161.0 1430.0,1200.0 1300.0,1239.0 1170.0,1200.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="1204.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">従業員ID があるか</tspan></text><text x="1288.0" y="1156.0" font-size="11" fill="#64748b" text-anchor="end">[C1-6]</text>
+<rect x="1233.0" y="1269.0" width="134.0" height="39.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="1293.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">支払あり（社内）</tspan></text><text x="1234.0" y="1264.0" font-size="11" fill="#64748b">[C1-4]</text>
+<polygon points="1220.5,1356.0 1379.5,1356.0 1379.5,1382.0 1366.5,1395.0 1233.5,1395.0 1220.5,1382.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="1380.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">C1：発明者のループ</tspan></text>
+<rect x="1076.2" y="1425.0" width="447.6" height="56.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="1449.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">支払対象者数＝支払ありの人数</tspan><tspan x="1300.0" dy="17">①に支払有無(n)・従業員ID(n)・受給者氏名(n)・所属会社コード(n)</tspan></text><text x="1077.2" y="1420.0" font-size="11" fill="#64748b">[C1-8]</text>
+<polygon points="1300.0,1547.0 1430.0,1586.0 1300.0,1625.0 1170.0,1586.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="1590.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">支払対象者は1人以上か</tspan></text><text x="1288.0" y="1542.0" font-size="11" fill="#64748b" text-anchor="end">[C3-1]</text>
+<rect x="1531.9" y="1558.0" width="216.2" height="56.0" fill="#f1f5f9" stroke="#475569" stroke-width="1.4"/><text x="1640.0" y="1582.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1640.0" dy="0">正常不支給 N03（到達＝完了）</tspan><tspan x="1640.0" dy="17">個人支給額(n)は空</tspan></text><text x="1532.9" y="1553.0" font-size="11" fill="#64748b">[C3-2]</text>
+<circle cx="1640.0" cy="1654.0" r="15" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1640.0" y="1659.0" font-size="14" fill="#1f2937" text-anchor="middle" font-weight="bold"><tspan x="1640.0" dy="0">F</tspan></text>
+<rect x="1128.6" y="1655.0" width="342.8" height="56.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="1679.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">個人支給額＝⌊分子 ÷（分母×人数×100）⌋×100</tspan><tspan x="1300.0" dy="17">（割るのはここで1回だけ。途中で丸めない）</tspan></text><text x="1129.6" y="1650.0" font-size="11" fill="#64748b">[C3-3]</text>
+<rect x="1187.5" y="1741.0" width="225.0" height="56.0" fill="#ecfdf5" stroke="#047857" stroke-width="1.4"/><text x="1300.0" y="1765.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">実支給額合計＝個人支給額の合計</tspan><tspan x="1300.0" dy="17">①＝正常支給（到達＝完了）</tspan></text><text x="1188.5" y="1736.0" font-size="11" fill="#64748b">[C3-4]</text>
+<rect x="1144.2" y="1847.0" width="311.5" height="56.0" rx="28.0" fill="#f1f5f9" stroke="#334155" stroke-width="1.4"/><text x="1300.0" y="1871.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1300.0" dy="0">終了：①の1行と対応表の行（全案件）を返す</tspan><tspan x="1300.0" dy="17">→ 1/3 の「報奨グループのループ」へ</tspan></text>
+<circle cx="1525.8" cy="1875.0" r="15" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1525.8" y="1880.0" font-size="14" fill="#1f2937" text-anchor="middle" font-weight="bold"><tspan x="1525.8" dy="0">F</tspan></text>
+<rect x="1551.5" y="1293.0" width="277.0" height="90.0" fill="#fef2f2" stroke="#b91c1c" stroke-width="1.4"/><text x="1690.0" y="1317.2" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1690.0" dy="0">エラー脱出（C2）</tspan><tspan x="1690.0" dy="17">①＝要確認・エラーコード・エラー詳細・</tspan><tspan x="1690.0" dy="17">到達ブロック（3-3／3-7(C1)）</tspan><tspan x="1690.0" dy="17">そこまでに確定した列は残す</tspan></text>
+<circle cx="1690.0" cy="1251.0" r="15" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1690.0" y="1256.0" font-size="14" fill="#1f2937" text-anchor="middle" font-weight="bold"><tspan x="1690.0" dy="0">E</tspan></text>
+<circle cx="1690.0" cy="1423.0" r="15" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1690.0" y="1428.0" font-size="14" fill="#1f2937" text-anchor="middle" font-weight="bold"><tspan x="1690.0" dy="0">F</tspan></text>
+<rect x="40.0" y="1989.0" width="58.0" height="30.0" rx="15.0" fill="#f1f5f9" stroke="#334155" stroke-width="1.4"/><text x="69.0" y="2008.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="69.0" dy="0"></tspan></text>
+<rect x="243.5" y="1989.0" width="58.0" height="30.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="272.5" y="2008.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="272.5" dy="0"></tspan></text>
+<polygon points="395.5,1989.0 424.5,2004.0 395.5,2019.0 366.5,2004.0" fill="#fffbeb" stroke="#334155" stroke-width="1.4"/><text x="395.5" y="2008.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="395.5" dy="0"></tspan></text>
+<rect x="489.5" y="1989.0" width="58.0" height="30.0" fill="#eff6ff" stroke="#334155" stroke-width="1.4"/><line x1="498.5" y1="1989.0" x2="498.5" y2="2019.0" stroke="#334155" stroke-width="1.2"/><line x1="538.5" y1="1989.0" x2="538.5" y2="2019.0" stroke="#334155" stroke-width="1.2"/><text x="518.5" y="2008.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="518.5" dy="0"></tspan></text>
+<polygon points="795.0,1989.0 833.0,1989.0 843.0,1999.0 843.0,2019.0 785.0,2019.0 785.0,1999.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="814.0" y="2008.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="814.0" dy="0"></tspan></text>
+<polygon points="988.5,1989.0 1046.5,1989.0 1046.5,2009.0 1036.5,2019.0 998.5,2019.0 988.5,2009.0" fill="#f5f3ff" stroke="#334155" stroke-width="1.4"/><text x="1017.5" y="2008.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1017.5" dy="0"></tspan></text>
+<polygon points="1164.0,1989.0 1186.0,1989.0 1204.0,2004.0 1186.0,2019.0 1164.0,2019.0 1146.0,2004.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1175.0" y="2008.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1175.0" dy="0"></tspan></text>
+<polygon points="1377.0,1989.0 1419.0,1989.0 1403.0,2019.0 1361.0,2019.0" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1390.0" y="2008.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1390.0" dy="0"></tspan></text>
+<path d="M1553.0,1989.0 H1611.0 V2011.0 Q1596.5,2025.0 1582.0,2011.0 Q1567.5,1997.0 1553.0,2011.0 Z" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="1582.0" y="2004.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="1582.0" dy="0"></tspan></text>
+<path d="M40.0,2048.0 L60.0,2033.0 H72.0 Q106.0,2048.0 72.0,2063.0 H60.0 Z" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="72.0" y="2052.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="72.0" dy="0"></tspan></text>
+<polygon points="209.0,2033.0 267.0,2033.0 251.0,2063.0 225.0,2063.0" fill="#ecfeff" stroke="#0e7490" stroke-width="1.4"/><text x="238.0" y="2052.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="238.0" dy="0"></tspan></text>
+<circle cx="393.0" cy="2048.0" r="15" fill="#ffffff" stroke="#334155" stroke-width="1.4"/><text x="393.0" y="2053.0" font-size="14" fill="#1f2937" text-anchor="middle" font-weight="bold"><tspan x="393.0" dy="0">A</tspan></text>
+<rect x="40.0" y="2081.0" width="58.0" height="26.0" fill="#fef2f2" stroke="#b91c1c" stroke-width="1.4"/><text x="69.0" y="2098.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="69.0" dy="0"></tspan></text>
+<rect x="271.0" y="2081.0" width="58.0" height="26.0" fill="#f1f5f9" stroke="#475569" stroke-width="1.4"/><text x="300.0" y="2098.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="300.0" dy="0"></tspan></text>
+<rect x="499.0" y="2081.0" width="58.0" height="26.0" fill="#ecfdf5" stroke="#047857" stroke-width="1.4"/><text x="528.0" y="2098.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="528.0" dy="0"></tspan></text>
+<rect x="698.5" y="2081.0" width="58.0" height="26.0" fill="#fff7ed" stroke="#c2410c" stroke-width="1.4" stroke-dasharray="6 4"/><text x="727.5" y="2098.7" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal"><tspan x="727.5" dy="0"></tspan></text>
+<text x="468.0" y="487.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ（E06）</text>
+<text x="337.0" y="546.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="337.0" y="847.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="532.9" y="788.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="518.6" y="898.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="337.0" y="957.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="476.3" y="1198.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="337.0" y="1257.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="1438.0" y="237.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="1307.0" y="295.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="1307.0" y="613.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="1307.0" y="723.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="1307.0" y="833.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="1307.0" y="1012.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="1155.9" y="1063.0" font-size="11.5" fill="#1f2937" text-anchor="end" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="1307.0" y="1122.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="1307.0" y="1252.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="1438.0" y="1580.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ</text>
+<text x="1307.0" y="1638.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい</text>
+<text x="1438.0" y="554.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">登場する（E10）</text>
+<text x="1516.0" y="664.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">違う（E10）</text>
+<text x="1466.0" y="774.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">付いている（E10）</text>
+<text x="1438.0" y="953.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">はい（E11）</text>
+<text x="1438.0" y="1194.0" font-size="11.5" fill="#1f2937" text-anchor="start" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">いいえ（E03）</text>
+<text x="793.0" y="498.0" font-size="11.5" fill="#64748b" text-anchor="start" font-weight="normal">右列の E（C2）へ</text>
+<text x="354.0" y="1840.0" font-size="11.5" fill="#64748b" text-anchor="start" font-weight="normal">右列の G へ</text>
+<text x="40.0" y="1963.0" font-size="13" fill="#1f2937" text-anchor="start" font-weight="bold">凡例</text>
+<text x="106.0" y="2008.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">端子（開始・終了）</text>
+<text x="309.5" y="2008.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">処理</text>
+<text x="432.5" y="2008.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">判断</text>
+<text x="555.5" y="2008.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">定義済み処理（別ページ・共通部品）</text>
+<text x="851.0" y="2008.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">ループ始端（条件）</text>
+<text x="1054.5" y="2008.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">ループ終端</text>
+<text x="1212.0" y="2008.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">準備（設定・初期化）</text>
+<text x="1427.0" y="2008.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">データ（入出力）</text>
+<text x="1619.0" y="2008.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">書類（Excel シート）</text>
+<text x="106.0" y="2052.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">表示（画面）</text>
+<text x="275.0" y="2052.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">手作業（人）</text>
+<text x="416.0" y="2052.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">結合子（同じ文字へ続く）</text>
+<text x="106.0" y="2098.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">要確認（エラー脱出 C2）</text>
+<text x="337.0" y="2098.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">正常不支給（N01・N03）</text>
+<text x="565.0" y="2098.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">正常支給・正常終了</text>
+<text x="764.5" y="2098.0" font-size="11.5" fill="#1f2937" text-anchor="start" font-weight="normal">⚠ 停止（技術的な不具合）</text>
+<text x="939.2" y="2098.0" font-size="11.5" fill="#0f766e" text-anchor="start" font-weight="normal">★ 仕様書の mermaid 図には描かれていない実際の処理（本文やコードにはある）</text>
+<text x="40.0" y="2128.0" font-size="11.5" fill="#c2410c" text-anchor="start" font-weight="normal">⚠ 技術的な不具合として処理全体を止める（要確認にはならず、結果ブックは保存しない。bat は「異常終了」と表示）</text>
+<text x="40.0" y="2151.0" font-size="11" fill="#64748b" text-anchor="start" font-weight="normal">出典：kunonao/houshoukin ブランチ b3-registered-after（3c4b710）＝ 共有用_報奨金算出_20260922/プログラム/houshoukin/b3/*.py の実際の処理順。[B3-x-y] は仕様書（改訂3a）のブロック番号。作図 2026-09-28。</text>
+</svg></div></figure>
+<section class="text" id="read">
+<h2>図の読み方</h2>
+<ul class="read">
+<li>上から下へ読む。判断の「はい」は下へ、「いいえ」やエラーは横へ出る。横へ出た線が背骨に戻る所は矢印で合流させた。</li>
+<li>角を切った六角形の対がループ端。上の記号（始端）に回す対象と順序、下の記号（終端）で1回分が終わる。</li>
+<li>丸に英字は結合子。同じ英字の所へ続く（A＝1/3 の左列から右列、E＝E06 からエラー脱出、F＝グループの終了、G＝3/3 の左列から右列）。</li>
+<li>二重線の箱は定義済み処理（別ページの図か、B0・C0 などの共通部品）。台形は人の手作業。</li>
+<li><span class="mark-star">★</span> は仕様書の mermaid 図には描かれていない実際の処理（本文やコードにはある）。中身は下の表。</li>
+<li><span class="mark-warn">⚠</span> は技術的な不具合として処理全体を止める所。要確認にはならず、結果ブックは保存されない（bat は「異常終了」と表示）。</li>
+</ul>
+</section>
+<section class="text" id="diff">
+<h2>仕様書の図との違い</h2>
+<p>仕様書（<code>B3_登録後報奨フロー.md</code>・<code>B3.0_ファミリー処理.md</code>・<code>B3.2_報奨グループ特定.md</code>・<code>C_共通部品.md</code>。改訂3a）のmermaid 図と、コードの実際の動きとの差。多くは仕様書の<strong>本文</strong>には書いてあり、図に描かれていないだけ。コード位置は <code>共有用_報奨金算出_20260922/プログラム/</code> からの相対パス（<code>b3-registered-after</code> の <code>プログラム/</code> 下も同じ行）。</p>
+</section>
+<div class="tablewrap" style="margin-top:10px"><table><thead><tr><th scope="col">#</th><th scope="col">箇所</th><th scope="col">仕様書の図</th><th scope="col">実際の処理（コード）</th><th scope="col">コード位置</th></tr></thead><tbody><tr><td>1</td><td>B3-0-1 実行前提</td><td>判断記号「評価ランク付与は完了しているか」→未完了なら開始しない</td><td><strong>判断は実装されていない</strong>（本文どおり運用上の前提）。未完了は E09 と終了時の一覧で分かる</td><td><code>houshoukin/b3/runner.py:123</code>（一覧の表示だけ）</td></tr><tr><td>2</td><td>起動・事前点検</td><td>描かれていない（B1〜B4 共通）</td><td>bat の前提確認 → 設定の読込 → 年度の確認（Enter）→ 開いているブックの確認 → 事前点検 → 既存の結果シートの確認。どれかで止まれば計算しない（終了コード 2）</td><td><code>実行/b3_登録後報奨を算出.bat</code>、<code>main.py:478</code>（run）・<code>main.py:246</code>（preflight）・<code>main.py:309</code></td></tr><tr><td>3</td><td>取込・B0</td><td>本文に「Raw を読んだ直後に B0」、図には無い</td><td>Raw 転写 → 取込ログ → Raw 読込（2回目の見出しを親の列にする）→ B0（4種類の補正を決まった順で）→ 金額マスタ読込</td><td><code>houshoukin/b3/runner.py:80-97</code>、<code>houshoukin/b0/corrections.py:212</code></td></tr><tr><td>4</td><td>N-02 期間の検査</td><td>無い</td><td>制度対象期間が同一年の 1/1〜12/31 でなければ、1行も処理せずに停止（⚠）</td><td><code>houshoukin/b3/period.py:78</code></td></tr><tr><td>5</td><td>K000 ランク無しの控え</td><td>終了時に一覧表示（本文）</td><td><strong>ゲートより前に</strong>全ファミリーぶん控える。E01・E02 で止まったファミリーの行も一覧に出る</td><td><code>houshoukin/b3/registration.py:146</code>、<code>gate.py:56</code></td></tr><tr><td>6</td><td>3-0 ゲートの順序</td><td>E01／E02／E09 の3つの判断</td><td>E01（必須値・必須列）→ E02（要素数）→ E09（K000 ランク無し）→ <strong>E01（K000 の判断日・ランク 01〜18・同日の別ランク）</strong>。最初に引っかかった1つだけがエラーコードになる</td><td><code>houshoukin/b3/gate.py:72</code>・<code>gate.py:125</code></td></tr><tr><td>7</td><td>3-1 真のH5</td><td>「JP-P に該当するH5か」→ 該当しない → H5 のまま保持</td><td>先に<strong>関係コードが H5 かを見て、H5 以外は親として数えない</strong>。H5 のうち親に「JP-P」を含むものを除外</td><td><code>houshoukin/b3/family.py:38</code></td></tr><tr><td>8</td><td>3-2 後回し</td><td>図の判断記号の中に「親が未付番なら後回し」と書いてあるだけ</td><td><strong>パスのループ</strong>（後回しの行が残る間くり返す）。1行も決まらないパスでは、後回しの先頭1行だけを後回しなしで決める（循環の解消）</td><td><code>houshoukin/b3/family.py:160-178</code></td></tr><tr><td>9</td><td>グループの処理順</td><td>付番したグループの順</td><td>ソート順で<strong>先に現れる行が属するグループ</strong>から処理する（後回しがあると付番の n の順と一致しないことがある）。支払単位ID の連番はこの処理順</td><td><code>houshoukin/b3/registration.py:172-181</code></td></tr><tr><td>10</td><td>3-4 評価付与日警告</td><td>本文のみ</td><td>採用ランクの判断日が評価付与日下限（既定＝前年 12/1）より前なら①「評価付与日警告」＝前年評価の疑い。要確認にはしない</td><td><code>houshoukin/b3/registration.py:224-230</code></td></tr><tr><td>11</td><td>3-4 明細表示本文</td><td>無い</td><td>①の明細表示本文は代表案件の本文。代表案件が空ならグループ内で最初に見つかる本文</td><td><code>houshoukin/b3/registration.py:235-238</code></td></tr><tr><td>12</td><td>3-6 基準額</td><td>金額を図に直書き（1：100,000円 …）</td><td>金額マスタ（設定/金額マスタ.xlsx）から、<strong>基準日＝制度対象期間の終了日</strong>で有効な行を引く。無ければ停止（⚠）</td><td><code>houshoukin/b3/amount.py:40</code>、<code>common/rate_table.py:217</code></td></tr><tr><td>13</td><td>3-7 E10</td><td>判断1つ（発明者集合が一致するか）</td><td><strong>3つ</strong>：①1案件に同じ人が2回（E10）②全案件の集合が一致しない（比べる基準はソート順で先頭の案件。E10）③同じ氏名に別の従業員ID（E10）</td><td><code>houshoukin/b3/recipients.py:54</code></td></tr><tr><td>14</td><td>3-7 E11</td><td><strong>B3.0 の図にも §5 終端一覧にも無い</strong>（C1 の図にはある）</td><td>C1 で「従業員ID があるのに所属会社コードが空」なら E11（到達 3-7(C1)）。合成データで実際にこの出口を通ることを確認</td><td><code>houshoukin/common/c1_recipients.py:35</code></td></tr><tr><td>15</td><td>技術的な停止（⚠）</td><td>無い（C2 は業務エラーだけ）</td><td>四法区分コードが P・U・D 以外、終期候補が1つも無い、対象日数が 0 以下、金額マスタに行が無い、補正マスタの設定誤り → 処理全体を止め、結果ブックは保存しない</td><td><code>identify.py:57</code>、<code>period.py:48・109</code>、<code>rate_table.py:217</code>、<code>corrections.py</code></td></tr><tr><td>16</td><td>出力・保存</td><td>無い</td><td>①・対応表のシート書出し → 件数表示 → 注意喚起2種 → 安全保存</td><td><code>houshoukin/b3/runner.py:99-118</code></td></tr></tbody></table></div>
+<section class="text" id="check">
+<h2>合成データでの確かめ</h2>
+<p>実コード（上記の版）に合成データ13ファミリーを流し、図の分岐がそのとおり動くことを確かめた（<code>検証/verify_b3_paths.py</code>）。</p>
+</section>
+<div class="tablewrap" style="margin-top:10px"><table><thead><tr><th scope="col">ファミリー</th><th scope="col">入れたデータ</th><th scope="col">結果</th></tr></thead><tbody><tr><td>F01</td><td>発明者の要素数不一致＋K000 ランク無し</td><td>E02（到達 3-0）。E09 より E02 が先。K000 無しの一覧には載る</td></tr><tr><td>F02</td><td>K000 のランクが「ZZ」</td><td>E01（到達 3-0）。E09 は通り、その後の値の検査で止まる</td></tr><tr><td>F03</td><td>K000 のランク無し</td><td>E09（到達 3-0）</td></tr><tr><td>F04</td><td>CN の単独の親がファミリー内の US（ソートで後ろ）</td><td>CN を後回し → US が新規 FO → CN が合流（1グループ・2案件）</td></tr><tr><td>F05</td><td>DE と FR が互いを親にする（循環）</td><td>先頭の DE を後回しなしで決め、FR が合流（1グループ）</td></tr><tr><td>F06</td><td>CN の親が JP:H5・JP-P1:H5、JP-P1 の親は JP:04</td><td>CN は JP のグループへ（JP-P フィルタ）。JP-P1 は別の JP グループ</td></tr><tr><td>F07</td><td>従業員ID あり・所属会社コード空</td><td>E11（到達 3-7(C1)）</td></tr><tr><td>F08</td><td>採用ランク 13</td><td>正常不支給 N01</td></tr><tr><td>F09</td><td>社外の発明者だけ</td><td>正常不支給 N03</td></tr><tr><td>F10</td><td>JP と US で発明者が違う</td><td>E10（到達 3-7(C1)）</td></tr><tr><td>F11</td><td>K000 の判断日が 2024-11-20（下限 2025-12-01 より前）</td><td>正常支給＋評価付与日警告「前年評価の疑い」</td></tr><tr><td>F12</td><td>明細表示本文の候補が全部空</td><td>E06（到達 3-3）</td></tr><tr><td>F13</td><td>JP と US が同じランク、US は 2025-06-30 に放棄</td><td>代表案件は JP（同点は JP 優先）。期間は最早始期 1/1〜最遅終期 12/31</td></tr></tbody></table></div>
+<section class="text" id="files">
+<h2>ファイル</h2>
+<ul class="files"><li><code>B3_実フロー図.html</code><span>このページ（3枚の図と、仕様書の図との違い）</span></li><li><code>svg/B3_実フロー図_1_全体.svg ほか2枚</code><span>図そのもの。ブラウザ・Word・PowerPoint に貼れる</span></li><li><code>B3_実フロー図.pdf</code><span>A3 縦・3ページ（印刷・配布用）</span></li><li><code>png/B3_実フロー図_*.png</code><span>画像版（2倍の解像度）</span></li><li><code>B3_実フロー図_mermaid.md</code><span>同じ内容の mermaid 版。ほかの LLM での照合用。差分表・確認表の元</span></li><li><code>make_b3_flow.py</code><span>作図スクリプト（標準ライブラリだけ）。直したら再実行すると svg と HTML が作り直される</span></li><li><code>検証/verify_b3_paths.py</code><span>合成データで分岐を確かめるスクリプト</span></li></ul>
+</section>
+</main>
+<footer class="text">出典：kunonao/houshoukin ブランチ b3-registered-after（3c4b710）＝ 共有用_報奨金算出_20260922/プログラム/houshoukin/b3/*.py の実際の処理順。[B3-x-y] は仕様書（改訂3a）のブロック番号。作図 2026-09-28。</footer>
+<script>
+(function(){
+  var KEY='b3-flow-zoom';
+  var btns=document.querySelectorAll('.zoom button');
+  function apply(mode){
+    document.body.classList.toggle('actual',mode==='actual');
+    btns.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.mode===mode));});
+  }
+  var saved='fit';
+  try{saved=localStorage.getItem(KEY)||'fit';}catch(e){}
+  apply(saved);
+  btns.forEach(function(b){b.addEventListener('click',function(){
+    apply(b.dataset.mode);
+    try{localStorage.setItem(KEY,b.dataset.mode);}catch(e){}
+  });});
+})();
+</script>
+</body>
+</html>
