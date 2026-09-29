@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>明細書の見本（ダミー2人分）</title>
+<style>
+@page { size: A4 portrait; margin: 12mm 12mm 13mm;
+  @bottom-right { content: counter(page) " / " counter(pages); font-size: 8pt; color: #6b7682; } }
+:root { --ink: #1c2024; --muted: #5d6873; --rule: #b9c3cc; --band: #eef3f6; --head: #234d60; --mark: #b3261e; }
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); background: #fff; font-size: 8.8pt; line-height: 1.5;
+  font-family: "Yu Gothic", "YuGothic", "Meiryo", "IPAPGothic", "IPAGothic", sans-serif; }
+.sheet { position: relative; }
+.sheet + .sheet { break-before: page; }
+.mark { position: fixed; top: 38%; left: 0; right: 0; text-align: center; font-size: 120pt; font-weight: bold;
+  color: rgba(179, 38, 30, 0.06); transform: rotate(-24deg); pointer-events: none; }
+.badge { display: inline-block; margin: 0 0 3mm; padding: 0.6mm 2.2mm; border: 1px solid var(--mark);
+  color: var(--mark); font-size: 8pt; }
+.top { display: flex; justify-content: space-between; align-items: flex-start; gap: 6mm; }
+h1 { margin: 0; font-size: 16pt; font-style: italic; text-decoration: underline; font-weight: bold; }
+.issuer { text-align: right; font-size: 8.8pt; }
+.issuer div:first-child { margin-bottom: 1.5mm; }
+.who { display: flex; justify-content: space-between; align-items: flex-end; margin: 5mm 0 3mm;
+  padding-bottom: 2mm; border-bottom: 1.5px solid var(--ink); }
+.person .id { font-size: 9pt; color: var(--muted); }
+.person .name { font-size: 14pt; font-weight: bold; }
+.person .name span { font-size: 10pt; font-weight: normal; margin-left: 3mm; }
+.total { font-size: 10pt; }
+.total b { font-size: 15pt; margin-left: 4mm; }
+.notes { margin: 0 0 4mm; padding: 0; list-style: none; font-size: 7.8pt; color: #3c454e; }
+.notes li { padding-left: 1.1em; text-indent: -1.1em; margin: 0.4mm 0; }
+.notes li::before { content: "※"; }
+.award { margin-top: 4mm; }
+h2 { display: flex; align-items: baseline; gap: 5mm; margin: 0 0 1mm; padding: 1mm 2mm; font-size: 10pt;
+  color: #fff; background: var(--head); break-after: avoid; }
+h2 .count { font-weight: normal; }
+h2 .sub { margin-left: auto; font-weight: normal; }
+h2 .sub b { font-weight: bold; }
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+th { font-weight: normal; font-size: 7.8pt; color: var(--muted); text-align: center; padding: 0.8mm 1mm;
+  border-bottom: 1px solid var(--rule); }
+tbody { break-inside: avoid; }
+td { padding: 1mm 1.2mm; vertical-align: top; }
+tr.line td { border-top: 1px solid var(--rule); background: var(--band); }
+tbody:first-of-type tr.line td { border-top: none; }
+td.case { font-weight: bold; overflow-wrap: anywhere; }
+td.c { text-align: center; white-space: nowrap; }
+td.r, td.pay { text-align: right; white-space: nowrap; }
+td.calc { white-space: nowrap; font-feature-settings: "tnum"; }
+td.pay { font-weight: bold; }
+tr.desc td { padding: 0.6mm 1.2mm 1.6mm; font-size: 7.8pt; color: #3c454e; }
+tr.desc b { color: var(--ink); margin-right: 2mm; }
+@media screen {
+  body { background: #d9dee3; padding: 8mm 0; }
+  .sheet { width: 210mm; min-height: 297mm; margin: 0 auto 8mm; padding: 12mm; background: #fff;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25); overflow: hidden; }
+  .sheet + .sheet { break-before: auto; }
+  .mark { position: absolute; }
+}
+</style>
+</head>
+<body>
+<section class="sheet">
+<div class="mark">見本</div>
+<p class="badge">見本（ダミーデータ・架空の案件）</p>
+<header class="top">
+<h1>2026年 特許等報奨金支払明細書</h1>
+<div class="issuer"><div>明細書発行日 2026/12/25</div><div>京都市左京区聖護院山王町４４番地</div><div>株式会社イシダ</div></div>
+</header>
+<div class="who">
+<div class="person"><div class="id">社員番号　t-yamada</div><div class="name">山田 太郎<span>様</span></div></div>
+<div class="total"><span>合計</span><b>97,600円</b></div>
+</div>
+<ul class="notes"><li>本報奨金は確定申告の対象となる場合があります。詳細については、法務･知的財産ポータル　知財関連ページの「報奨金の確定申告について」をご参照下さい。確定申告の対象となる場合には個別に手続きをお願い致します。</li><li>「計算」欄は、お支払額の求め方です。元の金額（規程で定める額）を受け取る人数で割り、最後に100円未満を切り捨てています。受け取る人数は、発明者のうち当社に所属する人の数です。途中の額は1円未満を切り捨てて表示しています。</li><li>登録後報奨には、評価ランクが記載されています。詳細については、法務･知的財産ポータル　知財関連ページの「発明取扱規定の概略説明資料」をご参照下さい。また、登録後報奨は、報奨対象期間（2025/1/1～2025/12/31）に権利が存在した日数で日割りしています（期間の按分＝権利が存在した日数／その年の日数）。</li><li>出願時報奨で、発明届を代理で作成した人がいる場合は、元の金額の1/4を代理作成者に、残りの3/4を発明者にお支払いしています。</li></ul>
+<section class="award award-b1">
+<h2><span class="label">出願時報奨</span><span class="count">3件</span><span class="sub">小計 <b>37,500円</b></span></h2>
+<table>
+<colgroup><col style="width:27%"><col style="width:13%"><col style="width:12%"><col style="width:33%"><col style="width:15%"></colgroup>
+<thead><tr><th>案件</th><th>元の金額</th><th>受け取る人数</th><th>計算</th><th>お支払額</th></tr></thead>
+<tbody>
+<tr class="line"><td class="case">特願2026-990101</td><td class="r">20,000円</td><td class="c">2名</td><td class="calc">20,000÷2＝10,000円</td><td class="pay">10,000円</td></tr>
+<tr class="desc"><td colspan="5"><b>組合せ計量装置</b><span>【課題】計量ホッパの数を増やさずに組合せの選択肢を増やし、計量精度を高める。【解決手段】複数の計量ホッパと、計量ホッパから排出された物品を一時的に保持するメモリホッパとを備え、制御部は、計量ホッパとメモリホッパの計量値を組み合わせて目標重量に最も近い組合せを選び、選ばれなかったメモリホッパの物品を次の組合せに持ち越す。</span></td></tr>
+</tbody>
+<tbody>
+<tr class="line"><td class="case">特願2026-990102</td><td class="r">20,000円</td><td class="c">2名</td><td class="calc">20,000×3/4÷2＝7,500円</td><td class="pay">7,500円</td></tr>
+<tr class="desc"><td colspan="5"><b>物品振分装置</b><span>【課題】搬送中の物品を、重量の判定結果に応じて速度を落とさずに振り分ける。【解決手段】コンベアで搬送される物品の重量を計量する計量部と、計量結果に基づいて物品を複数の排出経路のいずれかへ導く振分部とを備え、振分部は、物品の搬送速度と重量から振分けを始める時刻を求めて動作する。</span></td></tr>
+</tbody>
+<tbody>
+<tr class="line"><td class="case">特願2026-990103</td><td class="r">20,000円</td><td class="c">1名</td><td class="calc">20,000÷1＝20,000円</td><td class="pay">20,000円</td></tr>
+<tr class="desc"><td colspan="5"><b>包装袋の製造方法</b><span>【課題】シール不良を減らし、包装袋の製造速度を上げる。【解決手段】フィルムを筒状に成形する工程と、縦シールと横シールを行う工程とを含み、横シールの工程では、シールジョーの温度と押し付ける時間を、フィルムの厚さの測定値に応じて調整する。</span></td></tr>
+</tbody>
+</table>
+</section>
+<section class="award award-b2">
+<h2><span class="label">登録時報奨</span><span class="count">1件</span><span class="sub">小計 <b>16,600円</b></span></h2>
+<table>
+<colgroup><col style="width:27%"><col style="width:13%"><col style="width:12%"><col style="width:33%"><col style="width:15%"></colgroup>
+<thead><tr><th>案件</th><th>元の金額</th><th>受け取る人数</th><th>計算</th><th>お支払額</th></tr></thead>
+<tbody>
+<tr class="line"><td class="case">特許-9900101</td><td class="r">50,000円</td><td class="c">3名</td><td class="calc">50,000÷3＝16,666円</td><td class="pay">16,600円</td></tr>
+<tr class="desc"><td colspan="5"><b>箱詰め装置</b><span>【課題】大きさの異なる箱にも、物品を安定して箱詰めする。【解決手段】物品を保持して箱の上方まで移送する移送部と、箱の大きさを検出する検出部とを備え、移送部は、検出した箱の大きさに応じて物品を降ろす位置と速度を変える。</span></td></tr>
+</tbody>
+</table>
+</section>
+<section class="award award-b3">
+<h2><span class="label">登録後報奨</span><span class="count">2件</span><span class="sub">小計 <b>28,500円</b></span></h2>
+<table>
+<colgroup><col style="width:19%"><col style="width:8%"><col style="width:11%"><col style="width:13%"><col style="width:11%"><col style="width:26%"><col style="width:12%"></colgroup>
+<thead><tr><th>案件</th><th>評価ランク</th><th>元の金額</th><th>期間の按分</th><th>受け取る人数</th><th>計算</th><th>お支払額</th></tr></thead>
+<tbody>
+<tr class="line"><td class="case">特許-9900102</td><td class="c">10</td><td class="r">15,000円</td><td class="c">259日／365日</td><td class="c">3名</td><td class="calc">15,000×259/365÷3＝3,547円</td><td class="pay">3,500円</td></tr>
+<tr class="desc"><td colspan="7"><b>計量コンベア</b><span>【課題】コンベアの振動による計量誤差を小さくする。【解決手段】物品を搬送しながら計量する計量コンベアであって、ロードセルの出力から、コンベアの駆動に伴う振動の成分を取り除くフィルタを備え、フィルタの特性を搬送速度に応じて切り替える。</span></td></tr>
+</tbody>
+<tbody>
+<tr class="line"><td class="case">特許-9900103</td><td class="c">05</td><td class="r">50,000円</td><td class="c">365日／365日</td><td class="c">2名</td><td class="calc">50,000÷2＝25,000円</td><td class="pay">25,000円</td></tr>
+<tr class="desc"><td colspan="7"><b>Ｘ線検査装置</b><span>【課題】包装された食品に混じった異物を、包材の模様に惑わされずに検出する。【解決手段】Ｘ線を照射して透過画像を得る撮像部と画像処理部とを備え、画像処理部は、包材の模様を学習した結果を用いて透過画像から包材の像を取り除いた後に、異物を検出する。</span></td></tr>
+</tbody>
+</table>
+</section>
+<section class="award award-b4">
+<h2><span class="label">外国出願時報奨</span><span class="count">2件</span><span class="sub">小計 <b>15,000円</b></span></h2>
+<table>
+<colgroup><col style="width:27%"><col style="width:13%"><col style="width:12%"><col style="width:33%"><col style="width:15%"></colgroup>
+<thead><tr><th>案件</th><th>元の金額</th><th>受け取る人数</th><th>計算</th><th>お支払額</th></tr></thead>
+<tbody>
+<tr class="line"><td class="case">(CN特許)202599900103.2</td><td class="r">10,000円</td><td class="c">1名</td><td class="calc">10,000÷1＝10,000円</td><td class="pay">10,000円</td></tr>
+<tr class="desc"><td colspan="5"><b>包装袋の製造方法</b><span>【課題】シール不良を減らし、包装袋の製造速度を上げる。【解決手段】フィルムを筒状に成形する工程と、縦シールと横シールを行う工程とを含み、横シールの工程では、シールジョーの温度と押し付ける時間を、フィルムの厚さの測定値に応じて調整する。</span></td></tr>
+</tbody>
+<tbody>
+<tr class="line"><td class="case">(US特許)19/990,101</td><td class="r">10,000円</td><td class="c">2名</td><td class="calc">10,000÷2＝5,000円</td><td class="pay">5,000円</td></tr>
+<tr class="desc"><td colspan="5"><b>組合せ計量装置</b><span>【課題】計量ホッパの数を増やさずに組合せの選択肢を増やし、計量精度を高める。【解決手段】複数の計量ホッパと、計量ホッパから排出された物品を一時的に保持するメモリホッパとを備え、制御部は、計量ホッパとメモリホッパの計量値を組み合わせて目標重量に最も近い組合せを選び、選ばれなかったメモリホッパの物品を次の組合せに持ち越す。</span></td></tr>
+</tbody>
+</table>
+</section>
+</section>
+<section class="sheet">
+<div class="mark">見本</div>
+<p class="badge">見本（ダミーデータ・架空の案件）</p>
+<header class="top">
+<h1>2026年 特許等報奨金支払明細書</h1>
+<div class="issuer"><div>明細書発行日 2026/12/25</div><div>京都市左京区聖護院山王町４４番地</div><div>株式会社イシダ</div></div>
+</header>
+<div class="who">
+<div class="person"><div class="id">社員番号　h-sato</div><div class="name">佐藤 花子<span>様</span></div></div>
+<div class="total"><span>合計</span><b>41,000円</b></div>
+</div>
+<ul class="notes"><li>本報奨金は確定申告の対象となる場合があります。詳細については、法務･知的財産ポータル　知財関連ページの「報奨金の確定申告について」をご参照下さい。確定申告の対象となる場合には個別に手続きをお願い致します。</li><li>「計算」欄は、お支払額の求め方です。元の金額（規程で定める額）を受け取る人数で割り、最後に100円未満を切り捨てています。受け取る人数は、発明者のうち当社に所属する人の数です。途中の額は1円未満を切り捨てて表示しています。</li><li>登録後報奨には、評価ランクが記載されています。詳細については、法務･知的財産ポータル　知財関連ページの「発明取扱規定の概略説明資料」をご参照下さい。また、登録後報奨は、報奨対象期間（2025/1/1～2025/12/31）に権利が存在した日数で日割りしています（期間の按分＝権利が存在した日数／その年の日数）。</li><li>出願時報奨で、発明届を代理で作成した人がいる場合は、元の金額の1/4を代理作成者に、残りの3/4を発明者にお支払いしています。</li></ul>
+<section class="award award-b1">
+<h2><span class="label">出願時報奨</span><span class="count">2件</span><span class="sub">小計 <b>15,000円</b></span></h2>
+<table>
+<colgroup><col style="width:27%"><col style="width:13%"><col style="width:12%"><col style="width:33%"><col style="width:15%"></colgroup>
+<thead><tr><th>案件</th><th>元の金額</th><th>受け取る人数</th><th>計算</th><th>お支払額</th></tr></thead>
+<tbody>
+<tr class="line"><td class="case">特願2026-990101</td><td class="r">20,000円</td><td class="c">2名</td><td class="calc">20,000÷2＝10,000円</td><td class="pay">10,000円</td></tr>
+<tr class="desc"><td colspan="5"><b>組合せ計量装置</b><span>【課題】計量ホッパの数を増やさずに組合せの選択肢を増やし、計量精度を高める。【解決手段】複数の計量ホッパと、計量ホッパから排出された物品を一時的に保持するメモリホッパとを備え、制御部は、計量ホッパとメモリホッパの計量値を組み合わせて目標重量に最も近い組合せを選び、選ばれなかったメモリホッパの物品を次の組合せに持ち越す。</span></td></tr>
+</tbody>
+<tbody>
+<tr class="line"><td class="case">特願2026-990102</td><td class="r">20,000円</td><td class="c">代理作成</td><td class="calc">20,000×1/4＝5,000円</td><td class="pay">5,000円</td></tr>
+<tr class="desc"><td colspan="5"><b>物品振分装置</b><span>【課題】搬送中の物品を、重量の判定結果に応じて速度を落とさずに振り分ける。【解決手段】コンベアで搬送される物品の重量を計量する計量部と、計量結果に基づいて物品を複数の排出経路のいずれかへ導く振分部とを備え、振分部は、物品の搬送速度と重量から振分けを始める時刻を求めて動作する。</span></td></tr>
+</tbody>
+</table>
+</section>
+<section class="award award-b2">
+<h2><span class="label">登録時報奨</span><span class="count">1件</span><span class="sub">小計 <b>16,600円</b></span></h2>
+<table>
+<colgroup><col style="width:27%"><col style="width:13%"><col style="width:12%"><col style="width:33%"><col style="width:15%"></colgroup>
+<thead><tr><th>案件</th><th>元の金額</th><th>受け取る人数</th><th>計算</th><th>お支払額</th></tr></thead>
+<tbody>
+<tr class="line"><td class="case">特許-9900101</td><td class="r">50,000円</td><td class="c">3名</td><td class="calc">50,000÷3＝16,666円</td><td class="pay">16,600円</td></tr>
+<tr class="desc"><td colspan="5"><b>箱詰め装置</b><span>【課題】大きさの異なる箱にも、物品を安定して箱詰めする。【解決手段】物品を保持して箱の上方まで移送する移送部と、箱の大きさを検出する検出部とを備え、移送部は、検出した箱の大きさに応じて物品を降ろす位置と速度を変える。</span></td></tr>
+</tbody>
+</table>
+</section>
+<section class="award award-b3">
+<h2><span class="label">登録後報奨</span><span class="count">2件</span><span class="sub">小計 <b>4,400円</b></span></h2>
+<table>
+<colgroup><col style="width:19%"><col style="width:8%"><col style="width:11%"><col style="width:13%"><col style="width:11%"><col style="width:26%"><col style="width:12%"></colgroup>
+<thead><tr><th>案件</th><th>評価ランク</th><th>元の金額</th><th>期間の按分</th><th>受け取る人数</th><th>計算</th><th>お支払額</th></tr></thead>
+<tbody>
+<tr class="line"><td class="case">特許-9900102</td><td class="c">10</td><td class="r">15,000円</td><td class="c">259日／365日</td><td class="c">3名</td><td class="calc">15,000×259/365÷3＝3,547円</td><td class="pay">3,500円</td></tr>
+<tr class="desc"><td colspan="7"><b>計量コンベア</b><span>【課題】コンベアの振動による計量誤差を小さくする。【解決手段】物品を搬送しながら計量する計量コンベアであって、ロードセルの出力から、コンベアの駆動に伴う振動の成分を取り除くフィルタを備え、フィルタの特性を搬送速度に応じて切り替える。</span></td></tr>
+</tbody>
+<tbody>
+<tr class="line"><td class="case">特許-9900104</td><td class="c">12</td><td class="r">3,000円</td><td class="c">120日／365日</td><td class="c">1名</td><td class="calc">3,000×120/365÷1＝986円</td><td class="pay">900円</td></tr>
+<tr class="desc"><td colspan="7"><b>計量ホッパ</b><span>【課題】付着しやすい物品でも、計量ホッパから残らず排出する。【解決手段】計量ホッパのゲートの内面に物品が付着しにくい凹凸を設け、ゲートを開くときにホッパ本体を短い時間だけ振動させる。</span></td></tr>
+</tbody>
+</table>
+</section>
+<section class="award award-b4">
+<h2><span class="label">外国出願時報奨</span><span class="count">1件</span><span class="sub">小計 <b>5,000円</b></span></h2>
+<table>
+<colgroup><col style="width:27%"><col style="width:13%"><col style="width:12%"><col style="width:33%"><col style="width:15%"></colgroup>
+<thead><tr><th>案件</th><th>元の金額</th><th>受け取る人数</th><th>計算</th><th>お支払額</th></tr></thead>
+<tbody>
+<tr class="line"><td class="case">(US特許)19/990,101</td><td class="r">10,000円</td><td class="c">2名</td><td class="calc">10,000÷2＝5,000円</td><td class="pay">5,000円</td></tr>
+<tr class="desc"><td colspan="5"><b>組合せ計量装置</b><span>【課題】計量ホッパの数を増やさずに組合せの選択肢を増やし、計量精度を高める。【解決手段】複数の計量ホッパと、計量ホッパから排出された物品を一時的に保持するメモリホッパとを備え、制御部は、計量ホッパとメモリホッパの計量値を組み合わせて目標重量に最も近い組合せを選び、選ばれなかったメモリホッパの物品を次の組合せに持ち越す。</span></td></tr>
+</tbody>
+</table>
+</section>
+</section>
+</body>
+</html>
